@@ -63,7 +63,7 @@ msgstr "企业号应用"
 #. module: odoosoft_wechat_enterprise
 #: field:odoosoft.wechat.enterprise.application,application_id:0
 msgid "Application ID"
-msgstr "应用 ID"
+msgstr "应用ID"
 
 #. module: odoosoft_wechat_enterprise
 #: model:ir.model,name:odoosoft_wechat_enterprise.model_odoosoft_wechat_enterprise_user_batch_invite_wizard
@@ -120,7 +120,7 @@ msgstr "CorpID"
 #. module: odoosoft_wechat_enterprise
 #: field:odoosoft.wechat.enterprise.account,corpsecret:0
 msgid "Corpsecret"
-msgstr "Corpsecret"
+msgstr "CorpSecret"
 
 #. module: odoosoft_wechat_enterprise
 #: view:odoosoft.wechat.enterprise.user:odoosoft_wechat_enterprise.view_wechat_enterprise_force_user_form
@@ -156,7 +156,7 @@ msgstr "创建的账户"
 #: field:odoosoft.wechat.enterprise.user.batch.wizard,create_uid:0
 #: field:odoosoft.wechat.enterprise.user.wizard,create_uid:0
 msgid "Created by"
-msgstr "Created by"
+msgstr "创建人"
 
 #. module: odoosoft_wechat_enterprise
 #: field:odoosoft.wechat.enterprise.account,create_date:0
@@ -171,7 +171,7 @@ msgstr "Created by"
 #: field:odoosoft.wechat.enterprise.user.batch.wizard,create_date:0
 #: field:odoosoft.wechat.enterprise.user.wizard,create_date:0
 msgid "Created on"
-msgstr "Created on"
+msgstr "创建时间"
 
 #. module: odoosoft_wechat_enterprise
 #: field:odoosoft.wechat.enterprise.message,departments:0
@@ -188,7 +188,7 @@ msgstr "草稿"
 #: field:odoosoft.wechat.enterprise.user,email:0
 #: field:odoosoft.wechat.enterprise.user.wizard,email:0
 msgid "Email"
-msgstr "Email"
+msgstr "邮件"
 
 #. module: odoosoft_wechat_enterprise
 #: field:odoosoft.wechat.enterprise.application,ase_key:0
@@ -321,7 +321,7 @@ msgstr "上报地理位置"
 #: field:odoosoft.wechat.enterprise.user.batch.wizard,write_uid:0
 #: field:odoosoft.wechat.enterprise.user.wizard,write_uid:0
 msgid "Last Updated by"
-msgstr "Last Updated by"
+msgstr "最近更新用户"
 
 #. module: odoosoft_wechat_enterprise
 #: field:odoosoft.wechat.enterprise.account,write_date:0
@@ -337,7 +337,7 @@ msgstr "Last Updated by"
 #: field:odoosoft.wechat.enterprise.user.batch.wizard,write_date:0
 #: field:odoosoft.wechat.enterprise.user.wizard,write_date:0
 msgid "Last Updated on"
-msgstr "Last Updated on"
+msgstr "最近更新时间"
 
 #. module: odoosoft_wechat_enterprise
 #: selection:odoosoft.wechat.enterprise.filter,type:0
@@ -400,7 +400,7 @@ msgstr "待处理用户"
 #: selection:odoosoft.wechat.enterprise.filter,reply_type:0
 #: selection:odoosoft.wechat.enterprise.message,type:0
 msgid "News"
-msgstr "News"
+msgstr "新闻"
 
 #. module: odoosoft_wechat_enterprise
 #: selection:odoosoft.wechat.enterprise.user,state:0

@@ -1,8 +1,8 @@
 __author__ = 'cysnake4713'
 # coding=utf-8
-from openerp import tools, exceptions
-from openerp import models, fields, api
-from openerp.tools.translate import _
+from odoo import tools, exceptions
+from odoo import models, fields, api
+from odoo.tools.translate import _
 
 
 class ResUserInherit(models.Model):
@@ -26,14 +26,14 @@ class ResUserInherit(models.Model):
         self.SELF_READABLE_FIELDS.extend(['wechat_login', 'wechat_user'])
         return init_res
 
-    @api.multi
+    #@api.model_create_multi
     def unlink(self):
         for user in self:
             user.wechat_user.sudo().unlink()
         res = super(ResUserInherit, self).unlink()
         return res
 
-    @api.multi
+    #@api.model_create_multi
     def write(self, vals):
         self.env.cr.execute('SAVEPOINT user_write')
         result = super(ResUserInherit, self).write(vals)

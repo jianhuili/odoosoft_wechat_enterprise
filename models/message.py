@@ -1,15 +1,15 @@
 # coding=utf-8
 import base64
-import StringIO
+from io import StringIO
 
 __author__ = 'cysnake4713'
 
 import logging
 
-from urllib import quote_plus
-from openerp import tools
-from openerp import models, fields, api
-from openerp.tools.translate import _
+from urllib import parse
+from odoo import tools
+from odoo import models, fields, api
+from odoo.tools.translate import _
 from wechatpy.enterprise import WeChatClient
 
 _logger = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ class Message(models.Model):
     def process_message(self):
         self.search([('state', '=', 'draft')]).sent_message()
 
-    @api.multi
+    #@api.model_create_multi
     def sent_message(self):
         for message in self:
             target_users = message.users
@@ -88,7 +88,7 @@ class Message(models.Model):
             else:
                 message.write({'state': 'fail', 'result': u'没有可发送对象', 'send_time': fields.Datetime.now()})
 
-    @api.multi
+    #@api.model_create_multi
     def get_url(self):
         if self.template.is_no_url:
             return ''
@@ -112,7 +112,7 @@ class Message(models.Model):
                 self.sudo().env['ir.config_parameter'].get_param('wechat.base.url'), self.res_model, self.res_id)
         url = oath_url % {
             'CORPID': self.application.account.corp_id,
-            'REDIRECT_URI': quote_plus(index),
+            'REDIRECT_URI': parse.quote_plus(index),
             'STATE': self.application.account.code,
         }
         if have_mobile:
@@ -120,7 +120,7 @@ class Message(models.Model):
         else:
             return index
 
-    @api.multi
+    #@api.model_create_multi
     def text_message_content(self):
         if self.res_model and self.res_id:
             html_code = "<a href='%s'>%s</a>"
@@ -129,7 +129,7 @@ class Message(models.Model):
             content = self.content
         return content
 
-    @api.multi
+    #@api.model_create_multi
     def news_message_content(self):
         article = {}
         # url

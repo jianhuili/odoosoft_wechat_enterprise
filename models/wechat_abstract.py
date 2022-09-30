@@ -1,9 +1,9 @@
 __author__ = 'cysnake4713'
 
 # coding=utf-8
-from openerp import tools
-from openerp import models, fields, api
-from openerp.tools.translate import _
+from odoo import tools
+from odoo import models, fields, api
+from odoo.tools.translate import _
 
 
 class WechatAbstract(models.AbstractModel):
@@ -11,7 +11,7 @@ class WechatAbstract(models.AbstractModel):
 
     _description = 'Wechat Enterprise Abstract Model'
 
-    @api.multi
+    #@api.model_create_multi
     def send(self):
         wechat_code = self.env.context.get('wechat_code', [])
         users = self.env.context.get('message_users', '')

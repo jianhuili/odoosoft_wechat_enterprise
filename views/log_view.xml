@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data>
+<odoo>
+    <data noupdate="1">
         <record id="view_odoosoft_wechat_enterprise_log_tree" model="ir.ui.view">
             <field name="name">view.odoosoft.wechat.enterprise.log.tree</field>
             <field name="model">odoosoft.wechat.enterprise.log</field>
@@ -13,4 +13,4 @@
             </field>
         </record>
     </data>
-</openerp>
+</odoo>

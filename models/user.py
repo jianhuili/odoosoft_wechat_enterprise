@@ -1,10 +1,10 @@
 # coding=utf-8
 
 import time
-from openerp import tools
+from odoo import tools
 import logging
-from openerp import models, fields, api, exceptions
-from openerp.tools.translate import _
+from odoo import models, fields, api, exceptions
+from odoo.tools.translate import _
 from wechatpy.enterprise import WeChatClient
 from wechatpy.exceptions import WeChatClientException
 
@@ -41,13 +41,13 @@ class WechatUser(models.Model):
         self.email = self.user.email
         self.wechat_login = self.user.wechat_login
 
-    @api.one
+    # @api.one
     @api.constrains('wechat_login', 'mobile', 'email')
     def _check_wechat_info(self):
         if not self.wechat_login and not self.mobile and not self.email:
             raise exceptions.Warning(_('wechat_login, mobile, email can not be all none'))
 
-    @api.one
+    # @api.one
     def create_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             client = WeChatClient(self.account.corp_id, self.account.corpsecret)
@@ -60,7 +60,7 @@ class WechatUser(models.Model):
             client = WeChatClient(account.corp_id, account.corpsecret)
             client.user.batch_delete(user_ids=logins)
 
-    @api.multi
+    # @api.model_create_multi
     def write_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             for user in self:
@@ -84,7 +84,7 @@ class WechatUser(models.Model):
                 client.user.update(user_id=user.login, **remote_val)
                 user.with_context(is_no_wechat_sync=True).write(local_values)
 
-    @api.multi
+    #@api.model_create_multi
     def write(self, vals):
         # self.check_account_unique()
         self.env.cr.execute('SAVEPOINT wechat_write')
@@ -113,7 +113,7 @@ class WechatUser(models.Model):
         self.env.cr.execute('RELEASE SAVEPOINT wechat_create')
         return user
 
-    @api.multi
+    #@api.model_create_multi
     def check_account_unique(self):
         if self.ids:
             self.env.cr.execute("""
@@ -125,7 +125,7 @@ class WechatUser(models.Model):
             if len(res) > 1:
                 raise exceptions.Warning(_("Can't delete two account's user in one time."))
 
-    @api.multi
+    #@api.model_create_multi
     def unlink(self):
         self.check_account_unique()
         self.env.cr.execute('SAVEPOINT wechat_unlink')
@@ -142,25 +142,25 @@ class WechatUser(models.Model):
         self.env.cr.execute('RELEASE SAVEPOINT wechat_unlink')
         return result
 
-    @api.multi
+    #@api.model_create_multi
     def unlink_force(self):
         self.with_context(is_no_wechat_sync=True).unlink()
 
-    @api.multi
+    #@api.model_create_multi
     def create_force(self):
         try:
             self.create_wechat_account()
         except Exception as e:
             raise exceptions.Warning(str(e))
 
-    @api.multi
+    #@api.model_create_multi
     def write_force(self):
         try:
             self.write_wechat_account()
         except Exception as e:
             raise exceptions.Warning(str(e))
 
-    @api.multi
+    #@api.model_create_multi
     def button_invite(self):
         for user in self:
             try:
@@ -232,7 +232,7 @@ class WechatWizard(models.TransientModel):
     mobile = fields.Char('Mobile')
     email = fields.Char('Email')
 
-    @api.one
+    # @api.one
     @api.constrains('wechat_login', 'mobile', 'email')
     def _check_wechat_info(self):
         if not self.wechat_login and not self.mobile and not self.email:
@@ -248,7 +248,7 @@ class WechatWizard(models.TransientModel):
         result['user'] = user.id
         return result
 
-    @api.multi
+    #@api.model_create_multi
     def create_wechat_user(self):
         if self.mobile:
             self.user.mobile = self.mobile
@@ -283,7 +283,7 @@ class UserCreateWizard(models.TransientModel):
     create_users = fields.Many2many('odoosoft.wechat.enterprise.user', 'wechat_batch_user_rel', 'batch_id', 'user_id', 'Create Users')
     result = fields.Char('Result')
 
-    @api.multi
+    #@api.model_create_multi
     def button_batch_create(self):
         processed_users = []
         result = ''
@@ -315,7 +315,7 @@ class UserCreateWizard(models.TransientModel):
         res['res_id'] = self[0].id
         return res
 
-    @api.multi
+    #@api.model_create_multi
     def button_batch_create_fast(self):
         processed_users = []
         result = ''
@@ -387,7 +387,7 @@ class WechatInviteWizard(models.TransientModel):
             raise exceptions.Warning(_('Choose multi accounts users in one sync or no user need to be invited!'))
         return result
 
-    @api.multi
+    #@api.model_create_multi
     def button_batch_invite(self):
         app = self.env['odoosoft.wechat.enterprise.application'].search(
             [('account', '=', self.account_id.id), ('application_id', '=', 0)]).ensure_one()

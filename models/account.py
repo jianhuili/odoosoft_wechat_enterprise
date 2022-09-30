@@ -1,8 +1,8 @@
 __author__ = 'cysnake4713'
 # coding=utf-8
-from openerp import tools
-from openerp import models, fields, api
-from openerp.tools.translate import _
+from odoo import tools
+from odoo import models, fields, api
+from odoo.tools.translate import _
 from wechatpy.enterprise import WeChatClient
 
 
@@ -25,7 +25,7 @@ class WechatAccount(models.Model):
         else:
             return None
 
-    @api.multi
+    #@api.model_create_multi
     @tools.ormcache()
     def get_client(self):
         return WeChatClient(self.corp_id, self.corpsecret)
@@ -45,14 +45,14 @@ class WechatApplication(models.Model):
 
     _sql_constraints = [('wechat_app_code_unique', 'unique(code)', _('code must be unique !'))]
 
-    @api.multi
+    #@api.model_create_multi
     @api.depends('code')
     def _compute_url(self):
         address = self.env['ir.config_parameter'].get_param('wechat.base.url')
         for app in self:
             app.url = '%s/wechat_enterprise/%s/api' % (address, app.code)
 
-    @api.multi
+    #@api.model_create_multi
     def process_request(self, msg):
         # find match filter
         if msg.type == 'event':

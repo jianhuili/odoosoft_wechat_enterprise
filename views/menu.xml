@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data>
+<odoo>
+    <data noupdate="1">
         <record id="action_wechat_enterprise_account" model="ir.actions.act_window">
             <field name="name">企业账号</field>
             <field name="res_model">odoosoft.wechat.enterprise.account</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">form</field>
             <field name="target">current</field>
         </record>
         <record id="action_wechat_enterprise_message" model="ir.actions.act_window">
             <field name="name">企业消息</field>
             <field name="res_model">odoosoft.wechat.enterprise.message</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">form</field>
             <field name="target">current</field>
         </record>
 
@@ -25,8 +25,8 @@
         <record id="action_wechat_enterprise_user" model="ir.actions.act_window">
             <field name="name">通讯录</field>
             <field name="res_model">odoosoft.wechat.enterprise.user</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">form</field>
             <field name="target">current</field>
         </record>
         <record id="action_wechat_batch_user" model="ir.actions.act_window">
@@ -47,15 +47,15 @@
         <record id="action_wechat_enterprise_application" model="ir.actions.act_window">
             <field name="name">应用</field>
             <field name="res_model">odoosoft.wechat.enterprise.application</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">form</field>
             <field name="target">current</field>
         </record>
         <record id="action_wechat_enterprise_filter" model="ir.actions.act_window">
             <field name="name">过滤器</field>
             <field name="res_model">odoosoft.wechat.enterprise.filter</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">form</field>
             <field name="target">current</field>
             <field name="domain">[('is_template','=',False),('is_system','=',False)]</field>
         </record>
@@ -63,8 +63,8 @@
         <record id="action_wechat_enterprise_template" model="ir.actions.act_window">
             <field name="name">消息模板</field>
             <field name="res_model">odoosoft.wechat.enterprise.message.template</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">form</field>
             <field name="target">current</field>
         </record>
 
@@ -104,35 +104,30 @@
 
         <record id="action_sync_wechat_server_manual" model="ir.actions.server">
             <field name="name">Sync Wechat Server Manual</field>
-            <field name="condition">True</field>
+            <!-- <field name="condition">True</field> -->
             <field name="model_id" ref="model_odoosoft_wechat_enterprise_user"/>
             <field name="code">self.pool["odoosoft.wechat.enterprise.user"].sync_wechat_server(cr, uid, context=context)</field>
             <field name="state">code</field>
             <field name="type">ir.actions.server</field>
         </record>
 
-        <menuitem id="menuitem_wechat_enterprise_root" name="微信企业号" sequence="450"
-                  groups="odoosoft_wechat_enterprise.group_wechat_enterprise_user"/>
+        <menuitem id="menuitem_wechat_enterprise_root" name="微信企业号" sequence="450"/>
 
-        <menuitem id="menuitem_wechat_en_message" name="消息" parent="menuitem_wechat_enterprise_root" sequence="50"
-                  groups="odoosoft_wechat_enterprise.group_wechat_enterprise_message"/>
+        <menuitem id="menuitem_wechat_en_message" name="消息" parent="menuitem_wechat_enterprise_root" sequence="50"/>
         <menuitem id="menuitem_wechat_en_message_manage" name="所有消息" parent="menuitem_wechat_en_message" sequence="20"
                   action="action_wechat_enterprise_message"/>
 
-        <menuitem id="menuitem_wechat_en_filter" name="过滤器" parent="menuitem_wechat_enterprise_root" sequence="60"
-                  groups="odoosoft_wechat_enterprise.group_wechat_enterprise_filter"/>
+        <menuitem id="menuitem_wechat_en_filter" name="过滤器" parent="menuitem_wechat_enterprise_root" sequence="60"/>
         <menuitem id="menuitem_wechat_en_filter_manage" name="过滤器" parent="menuitem_wechat_en_filter" sequence="20"
                   action="action_wechat_enterprise_filter"/>
         <menuitem id="menuitem_wechat_filter_template" name="过滤器模板" parent="menuitem_wechat_en_filter" sequence="30"
                   action="action_wechat_filter_template"/>
 
-        <menuitem id="menuitem_wechat_en_template_root" name="模板" parent="menuitem_wechat_enterprise_root" sequence="70"
-                  groups="odoosoft_wechat_enterprise.group_wechat_enterprise_filter"/>
+        <menuitem id="menuitem_wechat_en_template_root" name="模板" parent="menuitem_wechat_enterprise_root" sequence="70"/>
         <menuitem id="menuitem_wechat_en_template_manage" name="模板" parent="menuitem_wechat_en_template_root" sequence="30"
                   action="action_wechat_enterprise_template"/>
 
-        <menuitem id="menuitem_wechat_en_user" name="通讯录" parent="menuitem_wechat_enterprise_root" sequence="70"
-                  groups="odoosoft_wechat_enterprise.group_wechat_enterprise_contact"/>
+        <menuitem id="menuitem_wechat_en_user" name="通讯录" parent="menuitem_wechat_enterprise_root" sequence="70"/>
         <menuitem id="menuitem_wechat_en_user_manage" name="所有用户" parent="menuitem_wechat_en_user" sequence="20"
                   action="action_wechat_enterprise_user"/>
         <menuitem id="menuitem_wechat_batch_user" name="批量创建用户" parent="menuitem_wechat_en_user" sequence="30"
@@ -142,16 +137,13 @@
         <menuitem id="menuitem_wechat_department" name="部门" parent="menuitem_wechat_en_user" sequence="50"
                   action="action_wechat_department"/>
         <menuitem id="menuitem_wechat_server_sync" name="手动同步服务器用户数据" parent="menuitem_wechat_en_user" sequence="60"
-                  action="action_sync_wechat_server_manual"
-                  groups="odoosoft_wechat_enterprise.group_wechat_enterprise_admin"/>
+                  action="action_sync_wechat_server_manual"/>
 
-        <menuitem id="menuitem_wechat_log_root" name="记录" parent="menuitem_wechat_enterprise_root" sequence="80"
-                  groups="odoosoft_wechat_enterprise.group_wechat_enterprise_admin"/>
+        <menuitem id="menuitem_wechat_log_root" name="记录" parent="menuitem_wechat_enterprise_root" sequence="80"/>
         <menuitem id="menuitem_wechat_log_user" name="Log" parent="menuitem_wechat_log_root" sequence="20"
                   action="action_wechat_enterprise_log"/>
 
-        <menuitem id="menuitem_wechat_enterprise_config" name="设置" parent="menuitem_wechat_enterprise_root" sequence="100"
-                  groups="odoosoft_wechat_enterprise.group_wechat_enterprise_admin"/>
+        <menuitem id="menuitem_wechat_enterprise_config" name="设置" parent="menuitem_wechat_enterprise_root" sequence="100"/>
         <menuitem id="menuitem_wechat_en_account" name="账户" parent="menuitem_wechat_enterprise_config" sequence="20"
                   action="action_wechat_enterprise_account"/>
         <menuitem id="menuitem_wechat_en_application" name="应用" parent="menuitem_wechat_enterprise_config" sequence="30"
@@ -161,15 +153,14 @@
         <menuitem id="menuitem_wechat_filter_template_system" name="系统过滤器" parent="menuitem_wechat_enterprise_config" sequence="50"
                   action="action_wechat_filter_template_system"/>
 
-        <menuitem id="menuitem_wechat_home_page" name="官网" parent="menuitem_wechat_enterprise_root" sequence="110"
-                  groups="odoosoft_wechat_enterprise.group_wechat_enterprise_user"/>
+        <menuitem id="menuitem_wechat_home_page" name="官网" parent="menuitem_wechat_enterprise_root" sequence="110"/>
         <menuitem id="menuitem_wechat_home_page_enterprise" name="企业号官网" parent="menuitem_wechat_home_page" sequence="20"
                   action="action_wechat_homepage_enterprise"/>
-
+<!-- 
         <act_window id="action_wechat_user_batch_invite"
                     multi="True"
                     key2="client_action_multi" name="批量邀请关注"
                     res_model="odoosoft.wechat.enterprise.user.batch.invite.wizard" src_model="odoosoft.wechat.enterprise.user"
-                    view_mode="form" target="new" view_type="form"/>
+                    view_mode="form" target="new" view_type="form"/> -->
     </data>
-</openerp>
+</odoo>

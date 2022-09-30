@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="view_wechat_enterprise_filter_search" model="ir.ui.view">
             <field name="name">view.odoosoft.wechat.enterprise.filter.search</field>
@@ -9,9 +9,9 @@
                     <field name="sequence"/>
                     <field name="name"/>
                     <field name="application"/>
-                    <group string="过滤">
+                    <!-- <group>
                         <filter string="未激活" domain="[('active','=',False)]"/>
-                    </group>
+                    </group> -->
                 </search>
             </field>
         </record>
@@ -229,4 +229,4 @@
             </field>
         </record>
     </data>
-</openerp>
+</odoo>

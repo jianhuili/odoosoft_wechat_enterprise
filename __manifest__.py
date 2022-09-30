@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Odoosoft Wechat Enterprise Module',
-    'version': '0.2',
+    'version': '0.3',
     'category': 'odoosoft_wechat',
-    'complexity': "easy",
     'description': """
 Odoosoft Wechat Enterprise""",
     'author': 'Matt Cai',
@@ -13,7 +12,7 @@ Odoosoft Wechat Enterprise""",
         'security/security.xml',
         'security/ir.model.access.csv',
         'data/data.xml',
-        'data/cron.xml',
+        #'data/cron.xml',
         # 'views/wechat_settings_view.xml',
         'views/template_view.xml',
         'views/log_view.xml',
@@ -27,9 +26,7 @@ Odoosoft Wechat Enterprise""",
         'views/app_map_view.xml',
         'views/menu.xml',
     ],
-    'qweb': [
-        'static/src/xml/*.xml',
-    ],
     'demo': [],
+    "external_dependencies": {"python": ['wechatpy']},
     'application': True
 }

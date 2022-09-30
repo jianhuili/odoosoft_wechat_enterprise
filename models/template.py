@@ -1,10 +1,11 @@
 __author__ = 'cysnake4713'
 
 # coding=utf-8
+from functools import reduce
 import logging
-from openerp import tools
-from openerp import models, fields, api
-from openerp.tools.translate import _
+from odoo import tools
+from odoo import models, fields, api
+from odoo.tools.translate import _
 import dateutil.relativedelta as relativedelta
 
 _logger = logging.getLogger(__name__)
@@ -63,7 +64,7 @@ class MessageTemplate(models.Model):
     url = fields.Char('URL')
     is_no_url = fields.Boolean('Is No Url', default=False)
 
-    @api.multi
+    #@api.model_create_multi
     def render(self, obj=None):
         # try to load the template
         template = mako_template_env.from_string(tools.ustr(self.content))

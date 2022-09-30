@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="view_wechat_enterprise_message_tree" model="ir.ui.view">
             <field name="name">view.odoosoft.wechat.enterprise.message.tree</field>
             <field name="model">odoosoft.wechat.enterprise.message</field>
             <field name="arch" type="xml">
-                <tree colors="blue:state=='draft';red:state=='fail'">
+                <tree decoration-info="state=='draft'"
+                     decoration-danger="state=='fail'">
                     <field name="application"/>
                     <!--<field name="users"/>-->
                     <field name="type"/>
@@ -68,4 +69,4 @@
         </record>
 
     </data>
-</openerp>
+</odoo>
