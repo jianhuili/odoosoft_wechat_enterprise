@@ -46,7 +46,7 @@ class ResUserInherit(models.Model):
                         'email': user.email,
                         'mobile': user.mobile,
                     })
-            except Exception, e:
+            except Exception as e:
                 self.env.cr.execute('ROLLBACK TO SAVEPOINT user_write')
                 raise exceptions.Warning(str(e))
         self.env.cr.execute('RELEASE SAVEPOINT user_write')

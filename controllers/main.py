@@ -55,12 +55,12 @@ class WechatControllers(http.Controller):
                 else:
                     _logger.info('reply None! msg= %s', msg)
                     return ''
-            except (InvalidSignatureException, InvalidCorpIdException), e:
+            except (InvalidSignatureException, InvalidCorpIdException) as e:
                 _logger.warning('decrypt_message fail. %s', e)
                 request.registry['odoosoft.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', 'decrypt_message fail. %s' % e,
                                                                             context=request.context)
                 return ''
-            except Exception, e:
+            except Exception as e:
                 _logger.error('process_request error: %s', e)
                 request.registry['odoosoft.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', 'process_request error: %s' % e,
                                                                             context=request.context)
@@ -94,7 +94,7 @@ class WechatControllers(http.Controller):
                 request.registry['odoosoft.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', 'reply_msg is None',
                                                                             context=request.context)
                 _logger.info('reply_msg is None')
-        except Exception, e:
+        except Exception as e:
             _logger.error('process_request error: %s', e)
             request.registry['odoosoft.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', 'process_request error: %s' % e,
                                                                         context=request.context)

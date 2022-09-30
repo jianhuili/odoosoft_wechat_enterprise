@@ -92,7 +92,7 @@ class WechatUser(models.Model):
         if 'is_no_wechat_sync' not in self.env.context:
             try:
                 self.write_wechat_account()
-            except Exception, e:
+            except Exception as e:
                 self.env.cr.execute('ROLLBACK TO SAVEPOINT wechat_write')
                 raise exceptions.Warning(str(e))
         self.env.cr.execute('RELEASE SAVEPOINT wechat_write')
@@ -107,7 +107,7 @@ class WechatUser(models.Model):
         if 'is_no_wechat_sync' not in self.env.context:
             try:
                 user.create_wechat_account()
-            except Exception, e:
+            except Exception as e:
                 self.env.cr.execute('ROLLBACK TO SAVEPOINT wechat_create')
                 raise exceptions.Warning(str(e))
         self.env.cr.execute('RELEASE SAVEPOINT wechat_create')
@@ -136,7 +136,7 @@ class WechatUser(models.Model):
         if 'is_no_wechat_sync' not in self.env.context and self.ids:
             try:
                 self.unlink_wechat_account(logins, account)
-            except Exception, e:
+            except Exception as e:
                 self.env.cr.execute('ROLLBACK TO SAVEPOINT wechat_unlink')
                 raise exceptions.Warning(str(e))
         self.env.cr.execute('RELEASE SAVEPOINT wechat_unlink')
@@ -150,14 +150,14 @@ class WechatUser(models.Model):
     def create_force(self):
         try:
             self.create_wechat_account()
-        except Exception, e:
+        except Exception as e:
             raise exceptions.Warning(str(e))
 
     @api.multi
     def write_force(self):
         try:
             self.write_wechat_account()
-        except Exception, e:
+        except Exception as e:
             raise exceptions.Warning(str(e))
 
     @api.multi
@@ -165,7 +165,7 @@ class WechatUser(models.Model):
         for user in self:
             try:
                 user.account.get_client().user.invite(user_id=user.login)
-            except WeChatClientException, e:
+            except WeChatClientException as e:
                 if e.errcode == 60119:  # message: contact already joined
                     user.state = '1'
                 else:
@@ -217,7 +217,7 @@ class WechatUser(models.Model):
                 if local_values:
                     mismatch_ids = [v['id'] for v in local_values.values()]
                     self.with_context(is_no_wechat_sync=True).browse(mismatch_ids).write({'state': '10'})
-            except WeChatClientException, e:
+            except WeChatClientException as e:
                 _logger.error('Get error in sync from server', e)
                 self.env['odoosoft.wechat.enterprise.log'].log_info(u'同步服务器用户', str(e))
         self.env['odoosoft.wechat.enterprise.log'].log_info(u'同步服务器用户', u'同步完成')
@@ -300,7 +300,7 @@ class UserCreateWizard(models.TransientModel):
             try:
                 new_wechat_users += self.env['odoosoft.wechat.enterprise.user'].create(value)
                 processed_users += user
-            except Exception, e:
+            except Exception as e:
                 result += '%s %s\n' % (user.name, str(e))
 
         value = {
@@ -335,7 +335,7 @@ class UserCreateWizard(models.TransientModel):
             try:
                 new_wechat_users += self.env['odoosoft.wechat.enterprise.user'].create(value)
                 processed_users += user
-            except Exception, e:
+            except Exception as e:
                 result += '%s %s\n' % (user.name, str(e))
         if result:
             self.env.cr.execute('ROLLBACK TO SAVEPOINT wechat_update_extend')

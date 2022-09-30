@@ -1,12 +1,12 @@
 __author__ = 'cysnake4713'
-import wechat_abstract
-import account
-import user
-import res_user
-import department
-import message
-import filter
-import app_module_map
-import log
-import template
+from . import wechat_abstract
+from . import account
+from . import user
+from . import res_user
+from . import department
+from . import message
+from . import filter
+from . import app_module_map
+from . import log
+from . import template
 # import wechat_settings

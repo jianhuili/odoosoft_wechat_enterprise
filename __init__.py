@@ -1,3 +1,3 @@
 __author__ = 'cysnake4713'
-import models
-import controllers
+from . import models
+from . import controllers

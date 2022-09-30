@@ -79,7 +79,7 @@ class WechatDepartment(models.Model):
         if 'is_no_wechat_sync' not in self.env.context:
             try:
                 department.create_wechat()
-            except Exception, e:
+            except Exception as e:
                 self.env.cr.execute('ROLLBACK TO SAVEPOINT wechat_department_create')
                 raise exceptions.Warning(str(e))
         self.env.cr.execute('RELEASE SAVEPOINT wechat_department_create')
@@ -96,7 +96,7 @@ class WechatDepartment(models.Model):
         if 'is_no_wechat_sync' not in self.env.context:
             try:
                 self.write_wechat(vals, old_user)
-            except Exception, e:
+            except Exception as e:
                 self.env.cr.execute('ROLLBACK TO SAVEPOINT wechat_department_write')
                 raise exceptions.Warning(str(e))
         self.env.cr.execute('RELEASE SAVEPOINT wechat_department_write')
@@ -111,7 +111,7 @@ class WechatDepartment(models.Model):
         if 'is_no_wechat_sync' not in self.env.context and self.ids:
             try:
                 self.unlink_wechat()
-            except Exception, e:
+            except Exception as e:
                 self.env.cr.execute('ROLLBACK TO SAVEPOINT wechat_department_unlink')
                 raise exceptions.Warning(str(e))
         result = super(WechatDepartment, self).unlink()

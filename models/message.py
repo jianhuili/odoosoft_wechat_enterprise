@@ -83,7 +83,7 @@ class Message(models.Model):
                     message.state = 'send'
                     message.result = u'成功'
                     message.send_time = fields.Datetime.now()
-                except Exception, e:
+                except Exception as e:
                     message.write({'state': 'fail', 'result': str(e), 'send_time': fields.Datetime.now()})
             else:
                 message.write({'state': 'fail', 'result': u'没有可发送对象', 'send_time': fields.Datetime.now()})
