@@ -36,26 +36,26 @@
                     <sheet>
                         <div class="oe_title">
                             <h1>
-                                <field name="name" placeholder="名称" required="1"/>
+                                <field name="name" placeholder="名称" required="1" readonly="0" />
                             </h1>
                         </div>
                         <group>
                             <group>
-                                <field name="application"/>
-                                <field name="sequence"/>
+                                <field name="application" readonly="0" />
+                                <field name="sequence" readonly="0" />
                             </group>
                             <group>
-                                <field name="template"/>
-                                <field name="active"/>
+                                <field name="template" readonly="0" />
+                                <field name="active" readonly="0" />
                             </group>
                         </group>
                         <group string="匹配" col="1">
                             <group>
                                 <group>
-                                    <field name="type" required="1"/>
+                                    <field name="type" required="1" readonly="0" />
                                 </group>
                                 <group>
-                                    <field name="event_type" attrs="{'invisible':[('type','!=','event')], 'required':[('type','=','event')]}"/>
+                                    <field name="event_type" readonly="0"  attrs="{'invisible':[('type','!=','event')], 'required':[('type','=','event')]}"/>
                                 </group>
                             </group>
                             <p class="oe_edit_only">
@@ -176,7 +176,7 @@
                         </group>
                         <group string="返回" col="1">
                             <group>
-                                <field name="reply_type"/>
+                                <field name="reply_type" readonly="0" />
                             </group>
                             <p class="oe_edit_only">
                                 reply结构提示:
@@ -219,10 +219,10 @@
                                     url:点击图文消息跳转链接
                                 </div>
                             </p>
-                            <field name="action" nolabel="1" widget="code_editor" code_type="python"/>
+                            <field name="action" nolabel="1" widget="code_editor" code_type="python" readonly="0" />
                         </group>
                         <group>
-                            <field name="is_template"/>
+                            <field name="is_template" readonly="0" />
                         </group>
                     </sheet>
                 </form>

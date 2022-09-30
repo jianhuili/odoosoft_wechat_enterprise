@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
+    <data noupdate="1">
         <record id="view_wechat_enterprise_message_tree" model="ir.ui.view">
             <field name="name">view.odoosoft.wechat.enterprise.message.tree</field>
             <field name="model">odoosoft.wechat.enterprise.message</field>
@@ -25,16 +25,16 @@
                 <form>
                     <header>
                         <button name="sent_message" string="发送" type="object" states="draft"
-                                groups="odoosoft_wechat_enterprise.group_wechat_enterprise_message"/>
+                                />
                         <button name="sent_message" string="重发" type="object" states="send,fail"
-                                groups="odoosoft_wechat_enterprise.group_wechat_enterprise_message"/>
+                                />
                         <field name="state" widget="statusbar" readonly="1"/>
                     </header>
                     <sheet>
                         <group>
                             <group>
-                                <field name="application"/>
-                                <field name="type" widget="radio"/>
+                                <field name="application" readonly="0"/>
+                                <field name="type" widget="radio" readonly="0"/>
                             </group>
                             <group>
                                 <field name="res_model" readonly="1"/>
@@ -44,19 +44,19 @@
                             </group>
                         </group>
                         <group>
-                            <field name="departments" widget="many2many_tags"/>
-                            <field name="users" widget="many2many_tags"/>
-                            <field name="res_users" widget="many2many_tags"/>
+                            <field name="departments" widget="many2many_tags" readonly="0" />
+                            <field name="users" widget="many2many_tags" readonly="0" />
+                            <field name="res_users" widget="many2many_tags" readonly="0" />
                         </group>
                         <group attrs="{'invisible':[('type','not in', ['news', 'text'])]}" col="1">
                             <separator string="消息内容"/>
-                            <field name="template"/>
-                            <field name="title" nolabel="1" placeholder="标题"/>
-                            <field name="content" nolabel="1" placeholder="正文"/>
+                            <field name="template" readonly="0" />
+                            <field name="title" nolabel="1" placeholder="标题" readonly="0" />
+                            <field name="content" nolabel="1" placeholder="正文" readonly="0" />
                         </group>
                         <group attrs="{'invisible':[('type','not in', ['image'])]}" col="1">
                             <separator string="文件"/>
-                            <field name="file" widget="many2many_binary" nolabel="1"/>
+                            <field name="file" widget="many2many_binary" nolabel="1" readonly="0" />
                         </group>
                         <separator string="发送结果"/>
                         <field name="result" readonly="1"/>

@@ -21,16 +21,16 @@
                 <form>
                     <sheet>
                         <group>
-                            <field name="name"/>
-                            <field name="code"/>
-                            <field name="account"/>
-                            <field name="application_id"/>
-                            <field name="token" groups="odoosoft_wechat_enterprise.group_wechat_enterprise_admin"/>
-                            <field name="ase_key" groups="odoosoft_wechat_enterprise.group_wechat_enterprise_admin"/>
+                            <field name="name" readonly="0" />
+                            <field name="code" readonly="0" />
+                            <field name="account" readonly="0" />
+                            <field name="application_id" readonly="0" />
+                            <field name="token" readonly="0" />
+                            <field name="ase_key" readonly="0" />
                             <field name="filters" readonly="1"/>
                         </group>
                         <div>
-                            <p>回调地址为:<field name="url"/></p>
+                            <!-- <p>回调地址为:<field name="url"/></p> -->
                         </div>
                     </sheet>
                 </form>

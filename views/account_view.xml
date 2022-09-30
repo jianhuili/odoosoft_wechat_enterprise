@@ -20,10 +20,10 @@
                 <form>
                     <sheet>
                         <group>
-                            <field name="code"/>
-                            <field name="name"/>
-                            <field name="corp_id"/>
-                            <field name="corpsecret" groups="odoosoft_wechat_enterprise.group_wechat_enterprise_admin"/>
+                            <field name="code" readonly="0"/>
+                            <field name="name" readonly="0"/>
+                            <field name="corp_id" readonly="0"/>
+                            <field name="corpsecret"  readonly="0" />
                         </group>
                     </sheet>
                 </form>

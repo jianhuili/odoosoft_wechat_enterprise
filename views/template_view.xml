@@ -21,20 +21,20 @@
                 <form>
                     <sheet>
                         <group>
-                            <field name="name"/>
-                            <field name="code"/>
-                            <field name="url"/>
-                            <field name="is_no_url"/>
+                            <field name="name" readonly="0"/>
+                            <field name="code" readonly="0"/>
+                            <field name="url" readonly="0"/>
+                            <field name="is_no_url" readonly="0"/>
                         </group>
                         <div class="oe_edit_only">
                             <p>
 
                             </p>
                         </div>
-                        <separator string="标题"/>
-                        <field name="title"/>
+                        <separator string="标题" readonly="0"/>
+                        <field name="title" readonly="0"/>
                         <separator string="正文"/>
-                        <field name="content"/>
+                        <field name="content" readonly="0"/>
                     </sheet>
                 </form>
             </field>

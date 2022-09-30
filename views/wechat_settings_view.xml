@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
+    <data noupdate="1">
         <record id="view_wechat_settings" model="ir.ui.view">
             <field name="name">wechat settings</field>
             <field name="model">odoosoft.wechat.config.settings</field>

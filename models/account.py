@@ -25,7 +25,7 @@ class WechatAccount(models.Model):
         else:
             return None
 
-    #@api.model_create_multi
+    # @api.model_create_multi
     @tools.ormcache()
     def get_client(self):
         return WeChatClient(self.corp_id, self.corpsecret)
@@ -41,18 +41,16 @@ class WechatApplication(models.Model):
     ase_key = fields.Char('EncodingAESKey')
     account = fields.Many2one('odoosoft.wechat.enterprise.account', 'Enterprise Account', required=True)
     filters = fields.One2many('odoosoft.wechat.enterprise.filter', 'application', 'Filters')
-    url = fields.Char('Callback url', compute='_compute_url')
+    url = fields.Char(string='Callback url', compute='_compute_url')
 
     _sql_constraints = [('wechat_app_code_unique', 'unique(code)', _('code must be unique !'))]
 
-    #@api.model_create_multi
     @api.depends('code')
     def _compute_url(self):
         address = self.env['ir.config_parameter'].get_param('wechat.base.url')
         for app in self:
             app.url = '%s/wechat_enterprise/%s/api' % (address, app.code)
 
-    #@api.model_create_multi
     def process_request(self, msg):
         # find match filter
         if msg.type == 'event':
