@@ -49,7 +49,7 @@ class Message(models.Model):
     def process_message(self):
         self.search([('state', '=', 'draft')]).sent_message()
 
-    #@api.model_create_multi
+   
     def sent_message(self):
         for message in self:
             target_users = message.users
@@ -88,7 +88,7 @@ class Message(models.Model):
             else:
                 message.write({'state': 'fail', 'result': u'没有可发送对象', 'send_time': fields.Datetime.now()})
 
-    #@api.model_create_multi
+   
     def get_url(self):
         if self.template.is_no_url:
             return ''
@@ -120,7 +120,7 @@ class Message(models.Model):
         else:
             return index
 
-    #@api.model_create_multi
+   
     def text_message_content(self):
         if self.res_model and self.res_id:
             html_code = "<a href='%s'>%s</a>"
@@ -129,7 +129,7 @@ class Message(models.Model):
             content = self.content
         return content
 
-    #@api.model_create_multi
+   
     def news_message_content(self):
         article = {}
         # url

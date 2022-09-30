@@ -25,7 +25,6 @@ class WechatAccount(models.Model):
         else:
             return None
 
-    # @api.model_create_multi
     @tools.ormcache()
     def get_client(self):
         return WeChatClient(self.corp_id, self.corpsecret)

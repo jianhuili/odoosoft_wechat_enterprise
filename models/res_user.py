@@ -26,14 +26,14 @@ class ResUserInherit(models.Model):
         self.SELF_READABLE_FIELDS.extend(['wechat_login', 'wechat_user'])
         return init_res
 
-    #@api.model_create_multi
+   
     def unlink(self):
         for user in self:
             user.wechat_user.sudo().unlink()
         res = super(ResUserInherit, self).unlink()
         return res
 
-    #@api.model_create_multi
+   
     def write(self, vals):
         self.env.cr.execute('SAVEPOINT user_write')
         result = super(ResUserInherit, self).write(vals)

@@ -41,7 +41,7 @@ class WechatDepartment(models.Model):
                 raise exceptions.Warning(_('Error! You cannot create recursive Type.'))
             level -= 1
 
-    # @api.one
+  
     def create_wechat(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             client = WeChatClient(self.account.corp_id, self.account.corpsecret)
@@ -49,7 +49,7 @@ class WechatDepartment(models.Model):
             for user in self.users:
                 client.user.update(user.login, department=[d.id for d in user.departments] or [1])
 
-    #@api.model_create_multi
+   
     def write_wechat(self, vals, department_old_user):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             for department in self:
@@ -85,7 +85,7 @@ class WechatDepartment(models.Model):
         self.env.cr.execute('RELEASE SAVEPOINT wechat_department_create')
         return department
 
-    #@api.model_create_multi
+   
     def write(self, vals):
         # self.check_account_unique()
         self.env.cr.execute('SAVEPOINT wechat_department_write')
@@ -102,7 +102,7 @@ class WechatDepartment(models.Model):
         self.env.cr.execute('RELEASE SAVEPOINT wechat_department_write')
         return result
 
-    #@api.model_create_multi
+   
     def unlink(self):
         for department in self:
             if department.children_ids:

@@ -11,7 +11,7 @@ class WechatAbstract(models.AbstractModel):
 
     _description = 'Wechat Enterprise Abstract Model'
 
-    #@api.model_create_multi
+   
     def send(self):
         wechat_code = self.env.context.get('wechat_code', [])
         users = self.env.context.get('message_users', '')

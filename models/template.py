@@ -64,7 +64,7 @@ class MessageTemplate(models.Model):
     url = fields.Char('URL')
     is_no_url = fields.Boolean('Is No Url', default=False)
 
-    #@api.model_create_multi
+   
     def render(self, obj=None):
         # try to load the template
         template = mako_template_env.from_string(tools.ustr(self.content))
