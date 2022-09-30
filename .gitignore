@@ -11,5 +11,5 @@ _build/
 /odoo.conf
 # emacs backup files
 *~
-
+__pycache__
 atlassian-ide-plugin.xml
