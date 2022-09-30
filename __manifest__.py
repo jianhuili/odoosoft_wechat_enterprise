@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Odoosoft Wechat Enterprise Module',
-    'version': '0.3',
+    'version': '0.5',
     'category': 'odoosoft_wechat',
     'description': """
 Odoosoft Wechat Enterprise""",
