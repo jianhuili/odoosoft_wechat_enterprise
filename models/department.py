@@ -45,7 +45,7 @@ class WechatDepartment(models.Model):
             client = WeChatClient(self.account.corpid, self.account.secret)
             client.department.create(name=self.name, parent_id=self.parent_id.id or 1, order=self.order, id=self.id)
             for user in self.users:
-                client.user.update(user.login, department=[d.id for d in user.departments] or [1])
+                client.user.update(user.user_id, department=[d.id for d in user.departments] or [1])
 
    
     def write_wechat(self, vals, department_old_user):
@@ -58,7 +58,7 @@ class WechatDepartment(models.Model):
                     new_user = [u.id for u in department.users]
                     need_update_users = self.env['odoo.wechat.enterprise.user'].browse(list(set(new_user) ^ set(old_user)))
                     for user in need_update_users:
-                        client.user.update(user.login, department=[d.id for d in user.departments] or [1])
+                        client.user.update(user.user_id, department=[d.id for d in user.departments] or [1])
 
 
     @api.model
@@ -67,7 +67,7 @@ class WechatDepartment(models.Model):
             for department in self:
                 client = WeChatClient(department.account.corpid, department.account.secret)
                 for user in department.users:
-                    client.user.update(user.login, department=[d.id for d in user.departments if d.id != department.id] or [1])
+                    client.user.update(user.user_id, department=[d.id for d in user.departments if d.id != department.id] or [1])
                 client.department.delete(department.id)
 
     @api.model

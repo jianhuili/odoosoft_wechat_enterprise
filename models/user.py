@@ -8,23 +8,23 @@ from odoo.tools.translate import _
 from wechatpy.enterprise import WeChatClient
 from wechatpy.exceptions import WeChatClientException
 
-
 _logger = logging.getLogger(__name__)
 
 
 class WechatUser(models.Model):
     _name = 'odoo.wechat.enterprise.user'
-    _rec_name = 'login'
+    _rec_name = 'wechat_user'
 
     state = fields.Selection([('1', 'Stared'), ('4', 'Not Stared'), ('2', 'Frozen'), ('10', 'Server No Match')], 'State', default='4')
 
-    login = fields.Char('Login', required=True)
+    user_id = fields.Char('UserID', required=True)
     name = fields.Char('Name', required=True)
 
-    user = fields.Many2one('res.users', 'User', ondelete='cascade')
+    odoo_user = fields.Many2one('res.users', 'User')
     mobile = fields.Char('Mobile')
     email = fields.Char('Email')
-    wechat_login = fields.Char('Wechat Login')
+    wechat_id = fields.Char('WechatID')
+
 
     job = fields.Char('Job')
     departments = fields.Many2many('odoo.wechat.enterprise.department', 'wechat_enterprise_department_user_rel', 'user_id', 'department_id',
@@ -34,55 +34,55 @@ class WechatUser(models.Model):
 
     active = fields.Boolean('Active', default=True)
 
-    @api.onchange('user')
+    @api.onchange('odoo_user')
     def onchange_user(self):
-        self.name = self.user.name
-        self.mobile = self.user.mobile
-        self.email = self.user.email
-        self.wechat_login = self.user.wechat_login
+        self.name = self.odoo_user.name
+        self.mobile = self.odoo_user.mobile
+        self.email = self.odoo_user.email
+        self.wechat_id = self.odoo_user.wechat_id
 
-  
-    @api.constrains('wechat_login', 'mobile', 'email')
+
+    @api.constrains('wechat_id', 'mobile', 'email')
     def _check_wechat_info(self):
-        if not self.wechat_login and not self.mobile and not self.email:
-            raise exceptions.Warning(_('wechat_login, mobile, email can not be all none'))
+        if not self.wechat_id and not self.mobile and not self.email:
+            raise exceptions.Warning(_('wechat_id, mobile, email can not be all none'))
 
   
     def create_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             client = WeChatClient(self.account.corpid, self.account.secret)
-            client.user.create(user_id=self.login, name=self.name, department=[d.id for d in self.departments] or [1], position=self.job,
-                               mobile=self.mobile, email=self.email, weixin_id=self.wechat_login)
+            client.user.create(userid=self.user_id, name=self.name, department=[d.id for d in self.departments] or [1], position=self.job,
+                               mobile=self.mobile, email=self.email, wechat_id=self.wechat_id)
 
     @api.model
-    def unlink_wechat_account(self, logins, account):
+    def unlink_wechat_account(self, userids, account):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             client = WeChatClient(account.corpid, account.secret)
-            client.user.batch_delete(user_ids=logins)
+            client.user.batch_delete(user_ids=userids)
 
     # @api.model_create_multi
     def write_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
-            for user in self:
-                client = WeChatClient(user.account.corpid, user.account.secret)
+            for record in self:
+                client = WeChatClient(record.account.corpid, record.account.secret)
                 # is user exist
-                wechat_user_info = client.user.get(user.login)
+                wechat_user_info = client.user.get(record.user_id)
                 # if exist, update
                 remote_val = {
-                    'name': user.name if user.name else wechat_user_info.get('name'),
-                    'position': user.job if user.job else wechat_user_info.get('position'),
-                    'mobile': user.mobile if user.mobile else wechat_user_info.get('mobile'),
-                    'email': user.email if user.email else wechat_user_info.get('email'),
-                    'weixin_id': user.wechat_login if user.wechat_login else wechat_user_info.get('weixinid'),
-                    'department': [d.id for d in user.departments] or [1],
+                    'name': record.name if record.name else wechat_user_info.get('name'),
+                    'position': record.job if record.job else wechat_user_info.get('position'),
+                    'mobile': record.mobile if record.mobile else wechat_user_info.get('mobile'),
+                    'email': record.email if record.email else wechat_user_info.get('email'),
+                    'weixin_id': record.wechat_id if record.wechat_id else wechat_user_info.get('wechat_id'),
+                    'department': [d.id for d in record.departments] or [1],
                 }
 
                 local_values = remote_val.copy()
                 local_values['job'] = local_values['position']
-                local_values['wechat_login'] = local_values['weixin_id']
+                local_values['wechat_id'] = local_values['weixin_id']
 
-                client.user.update(user_id=user.login, **remote_val)
-                user.with_context(is_no_wechat_sync=True).write(local_values)
+                client.user.update(user_id=record.user_id, **remote_val)
+                record.with_context(is_no_wechat_sync=True).write(local_values)
 
    
     def write(self, vals):
@@ -101,8 +101,8 @@ class WechatUser(models.Model):
     @api.model
     def create(self, vals):
         self.env.cr.execute('SAVEPOINT wechat_create')
-        if 'login' not in vals:
-            vals['login'] = self.env['ir.sequence'].get('wechat.login')
+        # if 'user_id' not in vals:
+        #     vals['user_id'] = self.env['ir.sequence'].get('user_id')
         user = super(WechatUser, self).create(vals)
         if 'is_no_wechat_sync' not in self.env.context:
             try:
@@ -129,13 +129,13 @@ class WechatUser(models.Model):
     def unlink(self):
         self.check_account_unique()
         self.env.cr.execute('SAVEPOINT wechat_unlink')
-        logins = [u.login for u in self]
+        userids = [u.user_id for u in self]
         if self.ids:
             account = self[0].account
         result = super(WechatUser, self).unlink()
         if 'is_no_wechat_sync' not in self.env.context and self.ids:
             try:
-                self.unlink_wechat_account(logins, account)
+                self.unlink_wechat_account(userids, account)
             except Exception as e:
                 self.env.cr.execute('ROLLBACK TO SAVEPOINT wechat_unlink')
                 raise exceptions.Warning(str(e))
@@ -162,12 +162,12 @@ class WechatUser(models.Model):
 
    
     def button_invite(self):
-        for user in self:
+        for record in self:
             try:
-                user.account.get_client().user.invite(user_id=user.login)
+                record.account.get_client().user.invite(user_id=record.user_id)
             except WeChatClientException as e:
                 if e.errcode == 60119:  # message: contact already joined
-                    user.state = '1'
+                    record.state = '1'
                 else:
                     raise e
 
@@ -181,14 +181,14 @@ class WechatUser(models.Model):
             try:
                 client = account.get_client()
                 server_values = client.user.list(department_id=1, fetch_child=True)
-                local_values = {v['login']: v for v in self.search_read([('account', '=', account.id)],
-                                                                        ['state', 'login', 'name', 'mobile', 'email', 'wechat_login', 'job', ])}
+                local_values = {v['user_id']: v for v in self.search_read([('account', '=', account.id)],
+                                                                        ['state', 'user_id', 'name', 'mobile', 'email', 'wechat_id', 'job', ])}
                 for server_value in server_values:
                     # if someone on server and in local
                     if server_value['userid'] in local_values:
-                        login = server_value['userid']
+                        user_id = server_value['userid']
                         temp_server_value = {
-                            'wechat_login': server_value.get('weixinid', False),
+                            'wechat_id': server_value.get('wechat_id', False),
                             'name': server_value['name'],
                             'mobile': server_value.get('mobile', False),
                             'job': server_value.get('position', False),
@@ -196,19 +196,19 @@ class WechatUser(models.Model):
                             'state': str(server_value['status']),
                         }
                         temp_local_value = {
-                            'wechat_login': local_values[login]['wechat_login'],
-                            'name': local_values[login]['name'],
-                            'mobile': local_values[login].get('mobile', False) or False,
-                            'job': local_values[login].get('job', False) or False,
-                            'email': local_values[login].get('email', False) or False,
-                            'state': local_values[login]['state'],
+                            'wechat_id': local_values[user_id]['wechat_login'],
+                            'name': local_values[user_id]['name'],
+                            'mobile': local_values[user_id].get('mobile', False) or False,
+                            'job': local_values[user_id].get('job', False) or False,
+                            'email': local_values[user_id].get('email', False) or False,
+                            'state': local_values[user_id]['state'],
                         }
                         # if have difference
                         if set(temp_server_value.items()) - set(temp_local_value.items()):
-                            self.env['odoo.wechat.enterprise.user'].browse(local_values[login]['id']).with_context(
+                            self.env['odoo.wechat.enterprise.user'].browse(local_values[user_id]['id']).with_context(
                                 is_no_wechat_sync=True).write(temp_server_value)
                         # un registry local value
-                        del local_values[login]
+                        del local_values[user_id]
                     # if someone on server but not in local
                     else:
                         _logger.warning('miss match server user:%s', server_value['userid'])
@@ -226,17 +226,17 @@ class WechatUser(models.Model):
 class WechatWizard(models.TransientModel):
     _name = 'odoo.wechat.enterprise.user.wizard'
 
-    user = fields.Many2one('res.users', 'User')
+    odoo_user = fields.Many2one('res.users', 'User')
     account = fields.Many2one('odoo.wechat.enterprise.account', 'Account', required=True)
-    wechat_login = fields.Char('Wechat Account')
+    wechat_id = fields.Char('Wechat Account')
     mobile = fields.Char('Mobile')
     email = fields.Char('Email')
 
   
-    @api.constrains('wechat_login', 'mobile', 'email')
+    @api.constrains('wechat_id', 'mobile', 'email')
     def _check_wechat_info(self):
-        if not self.wechat_login and not self.mobile and not self.email:
-            raise exceptions.Warning(_('wechat_login, mobile, email can not be all none'))
+        if not self.wechat_id and not self.mobile and not self.email:
+            raise exceptions.Warning(_('wechat_id, mobile, email can not be all none'))
 
     @api.model
     def default_get(self, fields_list):
@@ -244,31 +244,31 @@ class WechatWizard(models.TransientModel):
         user = self.env['res.users'].search([('id', '=', self.env.context['active_id'])]).ensure_one()
         result['mobile'] = user.mobile
         result['email'] = user.email
-        result['wechat_login'] = user.wechat_login
-        result['user'] = user.id
+        result['wechat_id'] = user.wechat_id
+        result['odoo_user'] = user.id
         return result
 
    
     def create_wechat_user(self):
         if self.mobile:
-            self.user.mobile = self.mobile
+            self.odoo_user.mobile = self.mobile
         if self.email:
-            self.user.email = self.email
-        if self.wechat_login:
-            self.user.wechat_login = self.wechat_login
+            self.odoo_user.email = self.email
+        if self.wechat_id:
+            self.odoo_user.wechat_id = self.wechat_id
         value = {
-            'user': self.user.id,
+            'user': self.odoo_user.id,
             'account': self.account.id,
-            'name': self.user.name,
-            'wechat_login': self.user.wechat_login,
-            'email': self.user.email,
-            'mobile': self.user.mobile,
+            'name': self.odoo_user.name,
+            'wechat_id': self.odoo_user.wechat_id,
+            'email': self.odoo_user.email,
+            'mobile': self.odoo_user.mobile,
         }
         self.env['odoo.wechat.enterprise.user'].create(value)
         self.env['res.users'].with_context(is_no_wechat_sync=True).write({
-            'wechat_login': self.user.wechat_login,
-            'email': self.user.email,
-            'mobile': self.user.mobile,
+            'wechat_id': self.odoo_user.wechat_id,
+            'email': self.odoo_user.email,
+            'mobile': self.odoo_user.mobile,
         })
         return True
 
@@ -290,10 +290,10 @@ class UserCreateWizard(models.TransientModel):
         new_wechat_users = []
         for user in self.res_users:
             value = {
-                'user': user.id,
+                'odoo_user': user.id,
                 'account': self.account.id,
                 'name': user.name,
-                'wechat_login': user.wechat_login,
+                'wechat_id': user.wechat_id,
                 'email': user.email,
                 'mobile': user.mobile,
             }
@@ -327,7 +327,7 @@ class UserCreateWizard(models.TransientModel):
                 'user': user.id,
                 'account': self.account.id,
                 'name': user.name,
-                'wechat_login': user.wechat_login,
+                'wechat_id': user.wechat_id,
                 'email': user.email,
                 'mobile': user.mobile,
                 'active': False,
@@ -347,7 +347,7 @@ class UserCreateWizard(models.TransientModel):
             # create csv file depends on new user information
             csv_file = u'姓名,帐号,微信号,手机号,邮箱,所在部门,职位\n'
             for user in new_wechat_users:
-                csv_file += u'%s,%s,%s,%s,%s,%s,\n' % (user.name, user.login, user.wechat_login or '', user.mobile or '', user.email or '', 1)
+                csv_file += u'%s,%s,%s,%s,%s,%s,\n' % (user.name, user.user_id, user.wechat_id or '', user.mobile or '', user.email or '', 1)
             csv_file = ('temp.csv', csv_file)
             # upload csv file
             client = WeChatClient(self.account.corpid, self.account.secret)
@@ -391,7 +391,7 @@ class WechatInviteWizard(models.TransientModel):
     def button_batch_invite(self):
         app = self.env['odoo.wechat.enterprise.account'].search(
             [('account', '=', self.account_id.id)]).ensure_one()
-        self.account_id.get_client().batch.invite_user(app.url, app.token, app.ase_key, [u.login for u in self.user_ids])
+        self.account_id.get_client().batch.invite_user(app.url, app.token, app.ase_key, [u.user_id for u in self.user_ids])
         return {
             'type': 'ir.actions.act_window.message',
             'title': _('Invite Send'),

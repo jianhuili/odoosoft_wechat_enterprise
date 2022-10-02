@@ -106,8 +106,8 @@ msgstr "内容"
 
 #. module: odoo_wechat_enterprise
 #: field:odoo.wechat.enterprise.account,corpid:0
-msgid "CorpID"
-msgstr "CorpID"
+msgid "corpid"
+msgstr "企业ID"
 
 #. module: odoo_wechat_enterprise
 #: field:odoo.wechat.enterprise.account,secret:0
@@ -116,7 +116,7 @@ msgstr "Secret"
 
 #. module: odoo_wechat_enterprise
 #: field:odoo.wechat.enterprise.account,agentId:0
-msgid "agentId"
+msgid "agentid"
 msgstr "AgentId"
 
 #. module: odoo_wechat_enterprise
@@ -345,9 +345,9 @@ msgid "Log"
 msgstr "日志"
 
 #. module: odoo_wechat_enterprise
-#: field:odoo.wechat.enterprise.user,login:0
-msgid "Login"
-msgstr "登录名"
+#: field:odoo.wechat.enterprise.user,user_id:0
+msgid "user_id"
+msgstr "用户ID"
 
 #. module: odoo_wechat_enterprise
 #: field:odoo.wechat.enterprise.filter,match:0
@@ -556,9 +556,9 @@ msgid "Voice"
 msgstr "语音"
 
 #. module: odoo_wechat_enterprise
-#: field:odoo.wechat.enterprise.user,wechat_login:0
-#: field:odoo.wechat.enterprise.user.wizard,wechat_login:0
-#: field:res.users,wechat_login:0
+#: field:odoo.wechat.enterprise.user,wechat_id:0
+#: field:odoo.wechat.enterprise.user.wizard,wechat_id:0
+#: field:res.users,wechat_id:0
 #: field:res.users,wechat_user:0
 msgid "Wechat Account"
 msgstr "微信账号"
@@ -930,7 +930,7 @@ msgstr "url:点击图文消息跳转链接"
 #: code:addons/odoo_wechat_enterprise/models/user.py:48
 #: code:addons/odoo_wechat_enterprise/models/user.py:239
 #, python-format
-msgid "wechat_login, mobile, email can not be all none"
+msgid "wechat_id, mobile, email can not be all none"
 msgstr "微信账号,手机,email can not be all none"
 
 #. module: odoo_wechat_enterprise
@@ -991,8 +991,8 @@ msgstr "官网"
 #. module: odoo_wechat_enterprise
 #: model:ir.actions.act_window,name:odoo_wechat_enterprise.action_wechat_enterprise_account
 #: model:ir.ui.menu,name:odoo_wechat_enterprise.menuitem_wechat_en_account
-msgid "应用"
-msgstr "应用"
+msgid "账户"
+msgstr "账户"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.actions.act_window,name:odoo_wechat_enterprise.action_wechat_force_create_user

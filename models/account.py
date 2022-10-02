@@ -10,7 +10,7 @@ class WechatAccount(models.Model):
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True)
     corpid = fields.Char('CorpID', required=True)
-    agentid = fields.Char('Agentid', required=True)
+    agentid = fields.Char('AgentId', required=True)
     secret = fields.Char('Secret', required=True)
     token = fields.Char('Token', required=True)
     ase_key = fields.Char('EncodingAESKey', required=True)

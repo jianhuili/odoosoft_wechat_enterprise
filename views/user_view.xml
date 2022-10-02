@@ -6,10 +6,10 @@
             <field name="model">odoo.wechat.enterprise.user</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="user_id"/>   
                     <field name="name"/>
-                    <field name="login"/>
-                    <field name="user"/>
-                    <field name="wechat_login"/>
+                    <!-- <field name="user"/> -->
+                    <field name="wechat_id"/>
                     <field name="mobile"/>
                     <field name="email"/>
                     <field name="account"/>
@@ -34,11 +34,6 @@
                         <group invisible="1">
                             <field name="id"/>
                         </group>
-                        <div>
-                            <h1>
-                                <field name="login" readonly="1" required="0"/>
-                            </h1>
-                        </div>
                         <group>
                             <group>
                                 <field name="account" attrs="{'readonly':[('id','!=',False)]}" readonly="0" />
@@ -46,10 +41,11 @@
                             </group>
                             <newline/>
                             <group>
+                                <field name="user_id" readonly="0"/>
                                 <field name="name" readonly="0" />
-                                <field name="mobile" readonly="0" />
                                 <field name="email" readonly="0" />
-                                <field name="wechat_login" readonly="0" />
+                                <field name="mobile" readonly="0" />
+                                <field name="wechat_id" readonly="0" />
                             </group>
                             <group>
                                 <field name="job" readonly="0" />
@@ -69,7 +65,7 @@
             <field name="priority">99</field>
             <field name="mode">primary</field>
             <field name="arch" type="xml">
-                <field name="login" position="attributes">
+                <field name="user_id" position="attributes">
                     <attribute name="readonly" eval="0"/>
                 </field>
                 <xpath expr="//header" position="replace"/>
@@ -94,7 +90,7 @@
                         <field name="account" readonly="0" />
                         <field name="mobile" readonly="0" />
                         <field name="email" readonly="0" />
-                        <field name="wechat_login" readonly="0" />
+                        <field name="wechat_id" readonly="0" />
                     </group>
                     <footer>
                         <button name="create_wechat_user" type="object" string="创建" class="oe_highlight"/>
@@ -125,12 +121,12 @@
                         <button name="%(action_wechat_enterprise_user_wizard)d" type="action" string="创建并且绑定微信账户"
                                 />
                         <group>
-                            <field name="wechat_login"/>
+                            <field name="wechat_id"/>
                         </group>
                         <field name="wechat_user" readonly="1">
                             <tree>
                                 <field name="account"/>
-                                <field name="login"/>
+                                <field name="user_id"/>
                             </tree>
                         </field>
                     </page>
@@ -145,7 +141,7 @@
             <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
             <field name="arch" type="xml">
                 <field name="email" position="after">
-                    <field name="wechat_login" readonly="0"/>
+                    <field name="wechat_id" readonly="0"/>
                 </field>
             </field>
         </record>
@@ -157,7 +153,7 @@
             <field name="inherit_id" ref="base.view_users_simple_form"/>
             <field name="arch" type="xml">
                 <field name="mobile" position="after">
-                    <field name="wechat_login" readonly="0"/>
+                    <field name="wechat_id" readonly="0"/>
                 </field>
             </field>
         </record>

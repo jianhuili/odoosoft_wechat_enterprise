@@ -10,7 +10,7 @@
                         <group>
                             <field name="account"/>
                             <field name="res_users"
-                                   domain="['&amp;',('wechat_user','=',False),'|','|',('wechat_login','!=',False),('mobile','!=',False),('email','!=',False)]"/>
+                                   domain="['&amp;',('wechat_user','=',False),'|','|',('wechat_id','!=',False),('mobile','!=',False),('email','!=',False)]"/>
                             <field name="processed_users" widget="many2many_tags" readonly="1"/>
                             <field name="create_users" readonly="1"/>
                         </group>

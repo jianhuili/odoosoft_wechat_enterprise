@@ -56,7 +56,7 @@ class Message(models.Model):
                      ('user', 'in', [u.id for u in message.res_users]),
                      ('account', '=', message.account.id),
                      ('id', 'in', [u.id for u in target_users])])
-            user_ids = '|'.join([u.login for u in target_users])
+            user_ids = '|'.join([u.user_id for u in target_users])
             message.users = target_users
             if target_users or message.departments:
                 try:

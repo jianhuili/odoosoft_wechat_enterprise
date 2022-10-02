@@ -8,7 +8,7 @@ class ResUserInherit(models.Model):
     _inherit = 'res.users'
 
     wechat_user = fields.One2many('odoo.wechat.enterprise.user', 'user', 'Wechat Account')
-    wechat_login = fields.Char('Wechat Account')
+    wechat_id = fields.Char('Wechat Account')
 
     def __init__(self, pool, cr):
         """ Override of __init__ to add access rights on
@@ -19,10 +19,10 @@ class ResUserInherit(models.Model):
         init_res = super(ResUserInherit, self).__init__(pool, cr)
         # duplicate list to avoid modifying the original reference
         self.SELF_WRITEABLE_FIELDS = list(self.SELF_WRITEABLE_FIELDS)
-        self.SELF_WRITEABLE_FIELDS.extend(['wechat_login', 'wechat_user'])
+        self.SELF_WRITEABLE_FIELDS.extend(['wechat_id', 'wechat_user'])
         # duplicate list to avoid modifying the original reference
         self.SELF_READABLE_FIELDS = list(self.SELF_READABLE_FIELDS)
-        self.SELF_READABLE_FIELDS.extend(['wechat_login', 'wechat_user'])
+        self.SELF_READABLE_FIELDS.extend(['wechat_id', 'wechat_user'])
         return init_res
 
    
@@ -36,12 +36,12 @@ class ResUserInherit(models.Model):
     def write(self, vals):
         self.env.cr.execute('SAVEPOINT user_write')
         result = super(ResUserInherit, self).write(vals)
-        if ('mobile' in vals or 'wechat_login' in vals or 'email' in vals) and 'is_no_wechat_sync' not in self.env.context:
+        if ('mobile' in vals or 'wechat_id' in vals or 'email' in vals) and 'is_no_wechat_sync' not in self.env.context:
             try:
                 for user in self:
                     user.wechat_user.sudo().write({
                         'user': user.id,
-                        'wechat_login': user.wechat_login,
+                        'wechat_id': user.wechat_id,
                         'email': user.email,
                         'mobile': user.mobile,
                     })
