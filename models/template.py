@@ -1,4 +1,3 @@
-__author__ = 'cysnake4713'
 
 # coding=utf-8
 from functools import reduce
@@ -53,9 +52,9 @@ except ImportError:
 
 
 class MessageTemplate(models.Model):
-    _name = 'odoosoft.wechat.enterprise.message.template'
+    _name = 'odoo.wechat.enterprise.message.template'
     _rec_name = 'name'
-    _description = 'Odoosoft Wechat Enterprise Template'
+    _description = 'Odoo Wechat Enterprise Template'
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code')

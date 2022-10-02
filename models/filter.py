@@ -1,4 +1,4 @@
-__author__ = 'cysnake4713'
+
 # coding=utf-8
 from odoo import tools
 from odoo import models, fields, api
@@ -7,9 +7,8 @@ from odoo.tools.safe_eval import safe_eval as eval
 from wechatpy.enterprise import replies
 import re
 
-
 class WechatFilter(models.Model):
-    _name = 'odoosoft.wechat.enterprise.filter'
+    _name = 'odoo.wechat.enterprise.filter'
 
     _order = 'sequence'
 
@@ -43,8 +42,8 @@ class WechatFilter(models.Model):
                                    ('news', 'News'),
                                    ], 'Reply Type', default='text', required=True)
     action = fields.Text('Action')
-    application = fields.Many2one('odoosoft.wechat.enterprise.application', copy=False)
-    template = fields.Many2one('odoosoft.wechat.enterprise.message.template', 'Template')
+    account = fields.Many2one('odoo.wechat.enterprise.account', copy=False)
+    template = fields.Many2one('odoo.wechat.enterprise.message.template', 'Template')
     active = fields.Boolean('Is Active', default=True)
     is_template = fields.Boolean('Is Template', default=False, copy=False)
     is_system = fields.Boolean('Is System', default=False)

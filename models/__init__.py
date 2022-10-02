@@ -1,4 +1,4 @@
-__author__ = 'cysnake4713'
+
 from . import wechat_abstract
 from . import account
 from . import user

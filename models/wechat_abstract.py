@@ -1,10 +1,8 @@
-__author__ = 'cysnake4713'
 
 # coding=utf-8
 from odoo import tools
 from odoo import models, fields, api
 from odoo.tools.translate import _
-
 
 class WechatAbstract(models.AbstractModel):
     _name = 'wechat.enterprise.abstract'
@@ -31,4 +29,4 @@ class WechatAbstract(models.AbstractModel):
                     'title': self.env.context.get('wechat_title', None),
                 }
 
-                self.env['odoosoft.wechat.enterprise.message'].create_message(**values)
+                self.env['odoo.wechat.enterprise.message'].create_message(**values)

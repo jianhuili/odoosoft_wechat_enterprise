@@ -1,9 +1,6 @@
 # coding=utf-8
 import base64
 from io import StringIO
-
-__author__ = 'cysnake4713'
-
 import logging
 
 from urllib import parse
@@ -16,16 +13,16 @@ _logger = logging.getLogger(__name__)
 
 
 class Message(models.Model):
-    _name = 'odoosoft.wechat.enterprise.message'
+    _name = 'odoo.wechat.enterprise.message'
     _order = 'id desc'
     _rec_name = 'state'
 
     state = fields.Selection([('draft', 'Draft'), ('send', 'Send'), ('fail', 'Fail')], 'Status', default='draft')
     type = fields.Selection([('text', 'Text'), ('news', 'News'), ('image', 'Image')], 'Message Type', default='text', required=True)
 
-    application = fields.Many2one('odoosoft.wechat.enterprise.application', 'Application', required=True)
-    users = fields.Many2many('odoosoft.wechat.enterprise.user', 'rel_wechat_ep_message_user', 'message_id', 'user_id', 'Users')
-    departments = fields.Many2many('odoosoft.wechat.enterprise.department', 'rel_wechat_ep_message_department', 'message_id', 'department_id',
+    account = fields.Many2one('odoo.wechat.enterprise.account', 'Account', required=True)
+    users = fields.Many2many('odoo.wechat.enterprise.user', 'rel_wechat_ep_message_user', 'message_id', 'user_id', 'Users')
+    departments = fields.Many2many('odoo.wechat.enterprise.department', 'rel_wechat_ep_message_department', 'message_id', 'department_id',
                                    'Departments')
     res_users = fields.Many2many('res.users', 'rel_wechat_ep_res_user', 'message_id', 'user_id', 'Res Users')
     create_user = fields.Many2one('res.users', 'Create User')
@@ -37,7 +34,7 @@ class Message(models.Model):
     # News Template
     title = fields.Char('Title')
     content = fields.Text('Content')
-    template = fields.Many2one('odoosoft.wechat.enterprise.message.template', 'Related Message Template')
+    template = fields.Many2one('odoo.wechat.enterprise.message.template', 'Related Message Template')
 
     # File
     file = fields.Many2many('ir.attachment', 'wechat_message_attachment_rel', 'message_id', 'attachment_id', 'Image File')
@@ -54,29 +51,29 @@ class Message(models.Model):
         for message in self:
             target_users = message.users
             if message.res_users:
-                target_users = self.env['odoosoft.wechat.enterprise.user'].search(
+                target_users = self.env['odoo.wechat.enterprise.user'].search(
                     ['|', '&',
                      ('user', 'in', [u.id for u in message.res_users]),
-                     ('account', '=', message.application.account.id),
+                     ('account', '=', message.account.id),
                      ('id', 'in', [u.id for u in target_users])])
             user_ids = '|'.join([u.login for u in target_users])
             message.users = target_users
             if target_users or message.departments:
                 try:
-                    client = WeChatClient(message.application.account.corp_id, message.application.account.corpsecret)
+                    client = WeChatClient(message.account.corpid, message.account.secret)
                     # TODO: all support
                     if message.type == 'text':
-                        client.message.send_text(message.application.application_id, user_ids,
+                        client.message.send_text(message.account.id, user_ids,
                                                  party_ids='|'.join([str(d.id) for d in message.departments]), content=message.text_message_content())
                     elif message.type == 'news':
-                        client.message.send_articles(message.application.application_id, user_ids,
+                        client.message.send_articles(message.account.id, user_ids,
                                                      party_ids='|'.join([str(d.id) for d in message.departments]),
                                                      articles=message.news_message_content())
                     elif message.type == 'image':
                         if self.file:
                             media_file = ('test.jpg', base64.b64decode(self.file[0].datas))
                             result = client.media.upload(media_type='image', media_file=media_file)
-                            client.message.send_image(message.application.application_id, user_ids,
+                            client.message.send_image(message.account.id, user_ids,
                                                       media_id=result['media_id'],
                                                       party_ids='|'.join([str(d.id) for d in message.departments]),
                                                       )
@@ -94,14 +91,13 @@ class Message(models.Model):
             return ''
         oath_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%(CORPID)s' + \
                    '&redirect_uri=%(REDIRECT_URI)s&response_type=code&scope=snsapi_base&state=%(STATE)s#wechat_redirect'
-        have_mobile = self.sudo().env['ir.module.module'].search([('state', '=', 'installed'), ('name', '=', 'odoosoft_mobile')])
+        have_mobile = self.sudo().env['ir.module.module'].search([('state', '=', 'installed'), ('name', '=', 'odoo_mobile')])
         if self.template.url:
             index = self.sudo().env['ir.config_parameter'].get_param('wechat.base.url') + self.template.url.format(**{
                 'res_id': self.res_id,
                 'res_model': self.res_model,
                 'res_name': self.res_name,
-                'account_code': self.application.account.code,
-                'app_code': self.application.code,
+                'account_code': self.account.code
             })
         else:
             if have_mobile:
@@ -111,9 +107,9 @@ class Message(models.Model):
             index = index % (
                 self.sudo().env['ir.config_parameter'].get_param('wechat.base.url'), self.res_model, self.res_id)
         url = oath_url % {
-            'CORPID': self.application.account.corp_id,
+            'CORPID': self.account.corpid,
             'REDIRECT_URI': parse.quote_plus(index),
-            'STATE': self.application.account.code,
+            'STATE': self.account.code,
         }
         if have_mobile:
             return url
@@ -156,21 +152,21 @@ class Message(models.Model):
         if not user_ids:
             user_ids = []
         if isinstance(code, int):
-            application = sudo_user.env['odoosoft.wechat.enterprise.map'].browse(code).application
+            account = sudo_user.env['odoo.wechat.enterprise.map'].browse(code).account
         else:
-            application = sudo_user.env['odoosoft.wechat.enterprise.map'].get_map(code)
+            account = sudo_user.env['odoo.wechat.enterprise.map'].get_map(code)
         if group_ids:
             for g_id in group_ids.split(','):
                 group_users += [u.id for u in self.env.ref(g_id).users]
         if template and isinstance(template, str):
-            result = self.env['odoosoft.wechat.enterprise.message.template'].search([('code', '=', template)])
+            result = self.env['odoo.wechat.enterprise.message.template'].search([('code', '=', template)])
             template = result.id if result else False
             if not template:
                 template = self.env.ref(template).id
 
-        if (user_ids or group_users) and application:
+        if (user_ids or group_users) and account:
             sudo_user.create({
-                'application': application.id,
+                'account': account.id,
                 'res_users': [(6, 0, list(set(user_ids + group_users)))],
                 'content': content,
                 'create_user': self.env.uid,

@@ -8,12 +8,12 @@ from odoo.tools.translate import _
 from wechatpy.enterprise import WeChatClient
 from wechatpy.exceptions import WeChatClientException
 
-__author__ = 'cysnake4713'
+
 _logger = logging.getLogger(__name__)
 
 
 class WechatUser(models.Model):
-    _name = 'odoosoft.wechat.enterprise.user'
+    _name = 'odoo.wechat.enterprise.user'
     _rec_name = 'login'
 
     state = fields.Selection([('1', 'Stared'), ('4', 'Not Stared'), ('2', 'Frozen'), ('10', 'Server No Match')], 'State', default='4')
@@ -24,13 +24,13 @@ class WechatUser(models.Model):
     user = fields.Many2one('res.users', 'User', ondelete='cascade')
     mobile = fields.Char('Mobile')
     email = fields.Char('Email')
-    wechat_login = fields.Char('Wechat Account')
+    wechat_login = fields.Char('Wechat Login')
 
     job = fields.Char('Job')
-    departments = fields.Many2many('odoosoft.wechat.enterprise.department', 'wechat_enterprise_department_user_rel', 'user_id', 'department_id',
+    departments = fields.Many2many('odoo.wechat.enterprise.department', 'wechat_enterprise_department_user_rel', 'user_id', 'department_id',
                                    'Departments')
 
-    account = fields.Many2one('odoosoft.wechat.enterprise.account', 'Account', required=True)
+    account = fields.Many2one('odoo.wechat.enterprise.account', 'Account', required=True)
 
     active = fields.Boolean('Active', default=True)
 
@@ -50,21 +50,21 @@ class WechatUser(models.Model):
   
     def create_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
-            client = WeChatClient(self.account.corp_id, self.account.corpsecret)
+            client = WeChatClient(self.account.corpid, self.account.secret)
             client.user.create(user_id=self.login, name=self.name, department=[d.id for d in self.departments] or [1], position=self.job,
                                mobile=self.mobile, email=self.email, weixin_id=self.wechat_login)
 
     @api.model
     def unlink_wechat_account(self, logins, account):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
-            client = WeChatClient(account.corp_id, account.corpsecret)
+            client = WeChatClient(account.corpid, account.secret)
             client.user.batch_delete(user_ids=logins)
 
     # @api.model_create_multi
     def write_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             for user in self:
-                client = WeChatClient(user.account.corp_id, user.account.corpsecret)
+                client = WeChatClient(user.account.corpid, user.account.secret)
                 # is user exist
                 wechat_user_info = client.user.get(user.login)
                 # if exist, update
@@ -117,7 +117,7 @@ class WechatUser(models.Model):
     def check_account_unique(self):
         if self.ids:
             self.env.cr.execute("""
-                    SELECT count(id), account FROM odoosoft_wechat_enterprise_user
+                    SELECT count(id), account FROM odoo_wechat_enterprise_user
                     WHERE id in %s
                     GROUP BY account
                 """, (tuple(self.ids),))
@@ -176,7 +176,7 @@ class WechatUser(models.Model):
         """
         sync wechat server user info to local database
         """
-        accounts = self.env['odoosoft.wechat.enterprise.account'].search([])
+        accounts = self.env['odoo.wechat.enterprise.account'].search([])
         for account in accounts:
             try:
                 client = account.get_client()
@@ -205,29 +205,29 @@ class WechatUser(models.Model):
                         }
                         # if have difference
                         if set(temp_server_value.items()) - set(temp_local_value.items()):
-                            self.env['odoosoft.wechat.enterprise.user'].browse(local_values[login]['id']).with_context(
+                            self.env['odoo.wechat.enterprise.user'].browse(local_values[login]['id']).with_context(
                                 is_no_wechat_sync=True).write(temp_server_value)
                         # un registry local value
                         del local_values[login]
                     # if someone on server but not in local
                     else:
                         _logger.warning('miss match server user:%s', server_value['userid'])
-                        self.env['odoosoft.wechat.enterprise.log'].log_info(u'同步服务器用户', u'服务器用户:%s没有在本机找到对应关系' % server_value['userid'])
+                        self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户', u'服务器用户:%s没有在本机找到对应关系' % server_value['userid'])
                 # if someone on local but not on server
                 if local_values:
                     mismatch_ids = [v['id'] for v in local_values.values()]
                     self.with_context(is_no_wechat_sync=True).browse(mismatch_ids).write({'state': '10'})
             except WeChatClientException as e:
                 _logger.error('Get error in sync from server', e)
-                self.env['odoosoft.wechat.enterprise.log'].log_info(u'同步服务器用户', str(e))
-        self.env['odoosoft.wechat.enterprise.log'].log_info(u'同步服务器用户', u'同步完成')
+                self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户', str(e))
+        self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户', u'同步完成')
 
 
 class WechatWizard(models.TransientModel):
-    _name = 'odoosoft.wechat.enterprise.user.wizard'
+    _name = 'odoo.wechat.enterprise.user.wizard'
 
     user = fields.Many2one('res.users', 'User')
-    account = fields.Many2one('odoosoft.wechat.enterprise.account', 'Account', required=True)
+    account = fields.Many2one('odoo.wechat.enterprise.account', 'Account', required=True)
     wechat_login = fields.Char('Wechat Account')
     mobile = fields.Char('Mobile')
     email = fields.Char('Email')
@@ -264,7 +264,7 @@ class WechatWizard(models.TransientModel):
             'email': self.user.email,
             'mobile': self.user.mobile,
         }
-        self.env['odoosoft.wechat.enterprise.user'].create(value)
+        self.env['odoo.wechat.enterprise.user'].create(value)
         self.env['res.users'].with_context(is_no_wechat_sync=True).write({
             'wechat_login': self.user.wechat_login,
             'email': self.user.email,
@@ -274,13 +274,13 @@ class WechatWizard(models.TransientModel):
 
 
 class UserCreateWizard(models.TransientModel):
-    _name = 'odoosoft.wechat.enterprise.user.batch.wizard'
+    _name = 'odoo.wechat.enterprise.user.batch.wizard'
     _rec_name = 'account'
 
-    account = fields.Many2one('odoosoft.wechat.enterprise.account', 'Account', required=True)
+    account = fields.Many2one('odoo.wechat.enterprise.account', 'Account', required=True)
     res_users = fields.Many2many('res.users', 'wechat_batch_res_user_rel', 'batch_id', 'user_id', 'Need Process Users')
     processed_users = fields.Many2many('res.users', 'wechat_batch_res_processed_user_rel', 'batch_id', 'user_id', 'Processed Users')
-    create_users = fields.Many2many('odoosoft.wechat.enterprise.user', 'wechat_batch_user_rel', 'batch_id', 'user_id', 'Create Users')
+    create_users = fields.Many2many('odoo.wechat.enterprise.user', 'wechat_batch_user_rel', 'batch_id', 'user_id', 'Create Users')
     result = fields.Char('Result')
 
    
@@ -298,7 +298,7 @@ class UserCreateWizard(models.TransientModel):
                 'mobile': user.mobile,
             }
             try:
-                new_wechat_users += self.env['odoosoft.wechat.enterprise.user'].create(value)
+                new_wechat_users += self.env['odoo.wechat.enterprise.user'].create(value)
                 processed_users += user
             except Exception as e:
                 result += '%s %s\n' % (user.name, str(e))
@@ -311,7 +311,7 @@ class UserCreateWizard(models.TransientModel):
         }
         self.write(value)
 
-        res = self.env['ir.actions.act_window'].for_xml_id('odoosoft_wechat_enterprise', 'action_wechat_batch_user')
+        res = self.env['ir.actions.act_window'].for_xml_id('odoo_wechat_enterprise', 'action_wechat_batch_user')
         res['res_id'] = self[0].id
         return res
 
@@ -333,7 +333,7 @@ class UserCreateWizard(models.TransientModel):
                 'active': False,
             }
             try:
-                new_wechat_users += self.env['odoosoft.wechat.enterprise.user'].create(value)
+                new_wechat_users += self.env['odoo.wechat.enterprise.user'].create(value)
                 processed_users += user
             except Exception as e:
                 result += '%s %s\n' % (user.name, str(e))
@@ -350,9 +350,9 @@ class UserCreateWizard(models.TransientModel):
                 csv_file += u'%s,%s,%s,%s,%s,%s,\n' % (user.name, user.login, user.wechat_login or '', user.mobile or '', user.email or '', 1)
             csv_file = ('temp.csv', csv_file)
             # upload csv file
-            client = WeChatClient(self.account.corp_id, self.account.corpsecret)
+            client = WeChatClient(self.account.corpid, self.account.secret)
             media = client.media.upload(media_type='file', media_file=csv_file)
-            app = self.env.ref('odoosoft_wechat_enterprise.application_default')
+            app = self.env.ref('odoo_wechat_enterprise.account_default')
             job_id = client.batch.sync_user(encoding_aes_key=app.ase_key, media_id=media['media_id'], token=app.token, url=app.token)['jobid']
             value = {
                 'res_users': [(3, u.id) for u in processed_users],
@@ -362,23 +362,23 @@ class UserCreateWizard(models.TransientModel):
             }
         self.write(value)
 
-        res = self.env['ir.actions.act_window'].for_xml_id('odoosoft_wechat_enterprise', 'action_wechat_batch_user')
+        res = self.env['ir.actions.act_window'].for_xml_id('odoo_wechat_enterprise', 'action_wechat_batch_user')
         res['res_id'] = self[0].id
         return res
 
 
 class WechatInviteWizard(models.TransientModel):
-    _name = 'odoosoft.wechat.enterprise.user.batch.invite.wizard'
+    _name = 'odoo.wechat.enterprise.user.batch.invite.wizard'
     _rec_name = 'account_id'
     _description = 'Batch Invite Wizard'
 
-    account_id = fields.Many2one('odoosoft.wechat.enterprise.account', 'Account')
-    user_ids = fields.Many2many('odoosoft.wechat.enterprise.user', 'invite_wizard_user_rel', 'invite_id', 'user_id', 'Need Invite Users')
+    account_id = fields.Many2one('odoo.wechat.enterprise.account', 'Account')
+    user_ids = fields.Many2many('odoo.wechat.enterprise.user', 'invite_wizard_user_rel', 'invite_id', 'user_id', 'Need Invite Users')
 
     @api.model
     def default_get(self, fields_list):
         result = super(WechatInviteWizard, self).default_get(fields_list)
-        users = self.env['odoosoft.wechat.enterprise.user'].search([('id', '=', self.env.context['active_ids']), ('state', '=', '4')])
+        users = self.env['odoo.wechat.enterprise.user'].search([('id', '=', self.env.context['active_ids']), ('state', '=', '4')])
         result['user_ids'] = [(6, 0, [u.id for u in users])]
         account_id = list(set([u.account.id for u in users]))
         if len(account_id) == 1:
@@ -389,8 +389,8 @@ class WechatInviteWizard(models.TransientModel):
 
    
     def button_batch_invite(self):
-        app = self.env['odoosoft.wechat.enterprise.application'].search(
-            [('account', '=', self.account_id.id), ('application_id', '=', 0)]).ensure_one()
+        app = self.env['odoo.wechat.enterprise.account'].search(
+            [('account', '=', self.account_id.id)]).ensure_one()
         self.account_id.get_client().batch.invite_user(app.url, app.token, app.ase_key, [u.login for u in self.user_ids])
         return {
             'type': 'ir.actions.act_window.message',

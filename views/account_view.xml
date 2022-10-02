@@ -2,29 +2,34 @@
 <odoo>
     <data>
         <record id="view_wechat_enterprise_account_tree" model="ir.ui.view">
-            <field name="name">view.odoosoft.wechat.enterprise.account.tree</field>
-            <field name="model">odoosoft.wechat.enterprise.account</field>
+            <field name="name">view.odoo.wechat.enterprise.account.tree</field>
+            <field name="model">odoo.wechat.enterprise.account</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="code"/>
                     <field name="name"/>
-                    <field name="corp_id"/>
                 </tree>
             </field>
         </record>
 
         <record id="view_wechat_enterprise_account_form" model="ir.ui.view">
-            <field name="name">view.odoosoft.wechat.enterprise.account.form</field>
-            <field name="model">odoosoft.wechat.enterprise.account</field>
+            <field name="name">view.odoo.wechat.enterprise.account.form</field>
+            <field name="model">odoo.wechat.enterprise.account</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
                         <group>
-                            <field name="code" readonly="0"/>
-                            <field name="name" readonly="0"/>
-                            <field name="corp_id" readonly="0"/>
-                            <field name="corpsecret"  readonly="0" />
+                            <field name="id" readonly="1"/>
+                            <field name="name" readonly="0" />
+                            <field name="corpid" readonly="0"/>
+                            <field name="agentid" readonly="0" />
+                            <field name="secret"  readonly="0" />
+                            <field name="token" readonly="0" />
+                            <field name="ase_key" readonly="0" />
+                            <field name="filters" readonly="1"/>
                         </group>
+                        <div>
+                            <!-- <p>回调地址为:<field name="url"/></p> -->
+                        </div>
                     </sheet>
                 </form>
             </field>

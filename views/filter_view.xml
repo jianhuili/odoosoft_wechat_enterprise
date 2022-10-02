@@ -2,13 +2,13 @@
 <odoo>
     <data>
         <record id="view_wechat_enterprise_filter_search" model="ir.ui.view">
-            <field name="name">view.odoosoft.wechat.enterprise.filter.search</field>
-            <field name="model">odoosoft.wechat.enterprise.filter</field>
+            <field name="name">view.odoo.wechat.enterprise.filter.search</field>
+            <field name="model">odoo.wechat.enterprise.filter</field>
             <field name="arch" type="xml">
                 <search>
                     <field name="sequence"/>
                     <field name="name"/>
-                    <field name="application"/>
+                    <field name="account"/>
                     <!-- <group>
                         <filter string="未激活" domain="[('active','=',False)]"/>
                     </group> -->
@@ -16,21 +16,21 @@
             </field>
         </record>
         <record id="view_wechat_enterprise_filter_tree" model="ir.ui.view">
-            <field name="name">view.odoosoft.wechat.enterprise.filter.tree</field>
-            <field name="model">odoosoft.wechat.enterprise.filter</field>
+            <field name="name">view.odoo.wechat.enterprise.filter.tree</field>
+            <field name="model">odoo.wechat.enterprise.filter</field>
             <field name="arch" type="xml">
                 <tree>
                     <field name="sequence"/>
                     <field name="name"/>
                     <field name="type"/>
                     <field name="active"/>
-                    <field name="application"/>
+                    <field name="account"/>
                 </tree>
             </field>
         </record>
         <record id="view_wechat_enterprise_filter_form" model="ir.ui.view">
-            <field name="name">view.odoosoft.wechat.enterprise.filter.form</field>
-            <field name="model">odoosoft.wechat.enterprise.filter</field>
+            <field name="name">view.odoo.wechat.enterprise.filter.form</field>
+            <field name="model">odoo.wechat.enterprise.filter</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
@@ -41,7 +41,7 @@
                         </div>
                         <group>
                             <group>
-                                <field name="application" readonly="0" />
+                                <field name="account" readonly="0" />
                                 <field name="sequence" readonly="0" />
                             </group>
                             <group>

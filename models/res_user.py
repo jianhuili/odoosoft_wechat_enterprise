@@ -1,14 +1,13 @@
-__author__ = 'cysnake4713'
+
 # coding=utf-8
 from odoo import tools, exceptions
 from odoo import models, fields, api
 from odoo.tools.translate import _
 
-
 class ResUserInherit(models.Model):
     _inherit = 'res.users'
 
-    wechat_user = fields.One2many('odoosoft.wechat.enterprise.user', 'user', 'Wechat Account')
+    wechat_user = fields.One2many('odoo.wechat.enterprise.user', 'user', 'Wechat Account')
     wechat_login = fields.Char('Wechat Account')
 
     def __init__(self, pool, cr):

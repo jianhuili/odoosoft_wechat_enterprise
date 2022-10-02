@@ -2,8 +2,8 @@
 <odoo>
     <data>
         <record id="view_wechat_enterprise_user_batch_wizard_form" model="ir.ui.view">
-            <field name="name">view.odoosoft.wechat.enterprise.user.batch.wizard.form</field>
-            <field name="model">odoosoft.wechat.enterprise.user.batch.wizard</field>
+            <field name="name">view.odoo.wechat.enterprise.user.batch.wizard.form</field>
+            <field name="model">odoo.wechat.enterprise.user.batch.wizard</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
@@ -28,8 +28,8 @@
         </record>
 
         <record id="view_wechat_enterprise_user_batch_invite_wizard_form" model="ir.ui.view">
-            <field name="name">view.odoosoft.wechat.enterprise.user.batch.invite.wizard.form</field>
-            <field name="model">odoosoft.wechat.enterprise.user.batch.invite.wizard</field>
+            <field name="name">view.odoo.wechat.enterprise.user.batch.invite.wizard.form</field>
+            <field name="model">odoo.wechat.enterprise.user.batch.invite.wizard</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>

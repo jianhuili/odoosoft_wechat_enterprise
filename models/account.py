@@ -1,54 +1,41 @@
-__author__ = 'cysnake4713'
+
 # coding=utf-8
 from odoo import tools
 from odoo import models, fields, api
 from odoo.tools.translate import _
 from wechatpy.enterprise import WeChatClient
 
-
 class WechatAccount(models.Model):
-    _name = 'odoosoft.wechat.enterprise.account'
-
-    name = fields.Char('Name', required=True)
+    _name = 'odoo.wechat.enterprise.account'
     code = fields.Char('Code', required=True)
-    corp_id = fields.Char('CorpID', required=True)
-    corpsecret = fields.Char('Corpsecret', required=True)
-
-    _sql_constraints = [('wechat_account_code_unique', 'unique(code)', _('code must be unique !'))]
+    name = fields.Char('Name', required=True)
+    corpid = fields.Char('CorpID', required=True)
+    agentid = fields.Char('Agentid', required=True)
+    secret = fields.Char('Secret', required=True)
+    token = fields.Char('Token', required=True)
+    ase_key = fields.Char('EncodingAESKey', required=True)
+    remark = fields.Char('Remark')
+    filters = fields.One2many('odoo.wechat.enterprise.filter', 'account', 'Filters')
+    callback_url = fields.Char(string='Callback url', compute='_compute_url')
+    _sql_constraints = [('wechat_account_code_unique', 'unique(code)', _('Code must be unique !'))]
 
     @api.model
     @tools.ormcache(skiparg=3)
-    def get_client_by_code(self, code):
-        account = self.search([('code', '=', code)])
+    def get_client_by_code(self, name):
+        account = self.search([('name', '=', name)])
         if account:
-            return WeChatClient(account.corp_id, account.corpsecret)
+            return WechatAccount(account.corpid, account.secret)
         else:
             return None
 
     @tools.ormcache()
     def get_client(self):
-        return WeChatClient(self.corp_id, self.corpsecret)
+        return WechatAccount(self.corpid, self.secret)
 
-
-class WechatApplication(models.Model):
-    _name = 'odoosoft.wechat.enterprise.application'
-
-    name = fields.Char('Name', required=True)
-    application_id = fields.Integer('Application ID', required=True)
-    code = fields.Char('Code', required=True)
-    token = fields.Char('Token')
-    ase_key = fields.Char('EncodingAESKey')
-    account = fields.Many2one('odoosoft.wechat.enterprise.account', 'Enterprise Account', required=True)
-    filters = fields.One2many('odoosoft.wechat.enterprise.filter', 'application', 'Filters')
-    url = fields.Char(string='Callback url', compute='_compute_url')
-
-    _sql_constraints = [('wechat_app_code_unique', 'unique(code)', _('code must be unique !'))]
-
-    @api.depends('code')
     def _compute_url(self):
         address = self.env['ir.config_parameter'].get_param('wechat.base.url')
-        for app in self:
-            app.url = '%s/wechat_enterprise/%s/api' % (address, app.code)
+        for account in self:
+            account.callback_url = '%s/wechat_enterprise/%s/api' % (address, account.code)
 
     def process_request(self, msg):
         # find match filter
