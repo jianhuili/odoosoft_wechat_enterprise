@@ -21,10 +21,10 @@ class Message(models.Model):
     type = fields.Selection([('text', 'Text'), ('news', 'News'), ('image', 'Image')], 'Message Type', default='text', required=True)
 
     account = fields.Many2one('odoo.wechat.enterprise.account', 'Account', required=True)
-    users = fields.Many2many('odoo.wechat.enterprise.user', 'rel_wechat_ep_message_user', 'message_id', 'user_id', 'Users')
+    users = fields.Many2many('odoo.wechat.enterprise.user', 'rel_wechat_ep_message_user', 'message_id', 'user_code', 'Users')
     departments = fields.Many2many('odoo.wechat.enterprise.department', 'rel_wechat_ep_message_department', 'message_id', 'department_id',
                                    'Departments')
-    res_users = fields.Many2many('res.users', 'rel_wechat_ep_res_user', 'message_id', 'user_id', 'Res Users')
+    res_users = fields.Many2many('res.users', 'rel_wechat_ep_res_user', 'message_id', 'user_code', 'Res Users')
     create_user = fields.Many2one('res.users', 'Create User')
 
     res_model = fields.Char('Res Model Name')
@@ -56,7 +56,7 @@ class Message(models.Model):
                      ('user', 'in', [u.id for u in message.res_users]),
                      ('account', '=', message.account.id),
                      ('id', 'in', [u.id for u in target_users])])
-            user_ids = '|'.join([u.user_id for u in target_users])
+            user_ids = '|'.join([u.user_code for u in target_users])
             message.users = target_users
             if target_users or message.departments:
                 try:

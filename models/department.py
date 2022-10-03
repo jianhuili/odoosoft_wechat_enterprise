@@ -20,7 +20,7 @@ class WechatDepartment(models.Model):
     order = fields.Integer('Order', required=True)
     parent_id = fields.Many2one('odoo.wechat.enterprise.department', 'Parent')
     children_ids = fields.One2many('odoo.wechat.enterprise.department', 'parent_id', 'Children')
-    users = fields.Many2many('odoo.wechat.enterprise.user', 'wechat_enterprise_department_user_rel', 'department_id', 'user_id', 'Users')
+    users = fields.Many2many('odoo.wechat.enterprise.user', 'wechat_enterprise_department_user_rel', 'department_id', 'user_code', 'Users')
 
     _sql_constraints = [
         ('odoo_wechat_enterprise_department_name_unique', 'unique(name, parent_id, account)', _('name must be unique each parent!'))]
@@ -45,7 +45,7 @@ class WechatDepartment(models.Model):
             client = WeChatClient(self.account.corpid, self.account.secret)
             client.department.create(name=self.name, parent_id=self.parent_id.id or 1, order=self.order, id=self.id)
             for user in self.users:
-                client.user.update(user.user_id, department=[d.id for d in user.departments] or [1])
+                client.user.update(user.user_code, department=[d.id for d in user.departments] or [1])
 
    
     def write_wechat(self, vals, department_old_user):
@@ -58,7 +58,7 @@ class WechatDepartment(models.Model):
                     new_user = [u.id for u in department.users]
                     need_update_users = self.env['odoo.wechat.enterprise.user'].browse(list(set(new_user) ^ set(old_user)))
                     for user in need_update_users:
-                        client.user.update(user.user_id, department=[d.id for d in user.departments] or [1])
+                        client.user.update(user.user_code, department=[d.id for d in user.departments] or [1])
 
 
     @api.model
@@ -67,7 +67,7 @@ class WechatDepartment(models.Model):
             for department in self:
                 client = WeChatClient(department.account.corpid, department.account.secret)
                 for user in department.users:
-                    client.user.update(user.user_id, department=[d.id for d in user.departments if d.id != department.id] or [1])
+                    client.user.update(user.user_code, department=[d.id for d in user.departments if d.id != department.id] or [1])
                 client.department.delete(department.id)
 
     @api.model

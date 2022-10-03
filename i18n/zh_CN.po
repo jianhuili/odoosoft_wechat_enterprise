@@ -345,8 +345,8 @@ msgid "Log"
 msgstr "日志"
 
 #. module: odoo_wechat_enterprise
-#: field:odoo.wechat.enterprise.user,user_id:0
-msgid "user_id"
+#: field:odoo.wechat.enterprise.user,user_code:0
+msgid "user_code"
 msgstr "用户ID"
 
 #. module: odoo_wechat_enterprise

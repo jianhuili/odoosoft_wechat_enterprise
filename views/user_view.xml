@@ -6,7 +6,7 @@
             <field name="model">odoo.wechat.enterprise.user</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="user_id"/>   
+                    <field name="user_code"/>   
                     <field name="name"/>
                     <!-- <field name="user"/> -->
                     <field name="wechat_id"/>
@@ -41,7 +41,7 @@
                             </group>
                             <newline/>
                             <group>
-                                <field name="user_id" readonly="0"/>
+                                <field name="user_code" readonly="0"/>
                                 <field name="name" readonly="0" />
                                 <field name="email" readonly="0" />
                                 <field name="mobile" readonly="0" />
@@ -65,7 +65,7 @@
             <field name="priority">99</field>
             <field name="mode">primary</field>
             <field name="arch" type="xml">
-                <field name="user_id" position="attributes">
+                <field name="user_code" position="attributes">
                     <attribute name="readonly" eval="0"/>
                 </field>
                 <xpath expr="//header" position="replace"/>
@@ -126,7 +126,7 @@
                         <field name="wechat_user" readonly="1">
                             <tree>
                                 <field name="account"/>
-                                <field name="user_id"/>
+                                <field name="user_code"/>
                             </tree>
                         </field>
                     </page>
