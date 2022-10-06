@@ -5,12 +5,13 @@
             <field name="name">view.odoo.wechat.enterprise.message.tree</field>
             <field name="model">odoo.wechat.enterprise.message</field>
             <field name="arch" type="xml">
-                <tree decoration-info="state=='draft'"
-                     decoration-danger="state=='fail'">
+                <tree decoration-info="status=='draft'"
+                     decoration-danger="status=='fail'"
+                     import="false">
                     <field name="account"/>
                     <!--<field name="users"/>-->
                     <field name="type"/>
-                    <field name="state"/>
+                    <field name="status"/>
                     <field name="title"/>
                     <field name="template"/>
                     <field name="create_user"/>
@@ -28,7 +29,7 @@
                                 />
                         <button name="sent_message" string="重发" type="object" states="send,fail"
                                 />
-                        <field name="state" widget="statusbar" readonly="1"/>
+                        <field name="status" widget="statusbar" readonly="1"/>
                     </header>
                     <sheet>
                         <group>
@@ -37,9 +38,9 @@
                                 <field name="type" widget="radio" readonly="0"/>
                             </group>
                             <group>
-                                <field name="res_model" readonly="1"/>
+                                <!-- <field name="res_model" readonly="1"/>
                                 <field name="res_id" readonly="1"/>
-                                <field name="res_name" readonly="1"/>
+                                <field name="res_name" readonly="1"/> -->
                                 <field name="create_user" readonly="1"/>
                             </group>
                         </group>

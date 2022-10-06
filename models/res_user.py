@@ -7,8 +7,8 @@ from odoo.tools.translate import _
 class ResUserInherit(models.Model):
     _inherit = 'res.users'
 
-    wechat_user = fields.One2many('odoo.wechat.enterprise.user', 'user', 'Wechat Account')
-    wechat_id = fields.Char('Wechat Account')
+    wechat_user = fields.One2many('odoo.wechat.enterprise.user', 'res_user', 'Wechat User')
+    wechat_id = fields.Char('Wechat UserID')
 
     def __init__(self, pool, cr):
         """ Override of __init__ to add access rights on
@@ -40,7 +40,7 @@ class ResUserInherit(models.Model):
             try:
                 for user in self:
                     user.wechat_user.sudo().write({
-                        'user': user.id,
+                        'res_user': user.id,
                         'wechat_id': user.wechat_id,
                         'email': user.email,
                         'mobile': user.mobile,

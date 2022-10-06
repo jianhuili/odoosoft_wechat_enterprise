@@ -175,7 +175,7 @@ msgid "Departments"
 msgstr "部门"
 
 #. module: odoo_wechat_enterprise
-#: selection:odoo.wechat.enterprise.message,state:0
+#: selection:odoo.wechat.enterprise.message,status:0
 msgid "Draft"
 msgstr "草稿"
 
@@ -217,7 +217,7 @@ msgid "Event Type"
 msgstr "事件类型"
 
 #. module: odoo_wechat_enterprise
-#: selection:odoo.wechat.enterprise.message,state:0
+#: selection:odoo.wechat.enterprise.message,status:0
 msgid "Fail"
 msgstr "失败"
 
@@ -227,9 +227,9 @@ msgid "Filters"
 msgstr "过滤器"
 
 #. module: odoo_wechat_enterprise
-#: selection:odoo.wechat.enterprise.user,state:0
-msgid "Frozen"
-msgstr "冻结"
+#: selection:odoo.wechat.enterprise.user,status:0
+msgid "Forbidden"
+msgstr "禁止"
 
 #. module: odoo_wechat_enterprise
 #: field:odoo.wechat.enterprise.account,id:0
@@ -398,9 +398,9 @@ msgid "News"
 msgstr "新闻"
 
 #. module: odoo_wechat_enterprise
-#: selection:odoo.wechat.enterprise.user,state:0
-msgid "Not Stared"
-msgstr "未关注"
+#: selection:odoo.wechat.enterprise.user,status:0
+msgid "Inactive"
+msgstr "未激活"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.model,name:odoo_wechat_enterprise.model_odoo_wechat_enterprise_message_template
@@ -424,8 +424,8 @@ msgstr "已处理用户"
 
 #. module: odoo_wechat_enterprise
 #: field:odoo.wechat.enterprise.message,template:0
-msgid "Related Message Template"
-msgstr "相关消息模板"
+msgid "Message Template"
+msgstr "消息模板"
 
 #. module: odoo_wechat_enterprise
 #: field:odoo.wechat.enterprise.filter,reply_type:0
@@ -449,7 +449,7 @@ msgstr "Res Name"
 
 #. module: odoo_wechat_enterprise
 #: field:odoo.wechat.enterprise.message,res_users:0
-msgid "Res Users"
+msgid "Odoo Users"
 msgstr "接收人(系统账户)"
 
 #. module: odoo_wechat_enterprise
@@ -458,7 +458,7 @@ msgid "Result"
 msgstr "结果"
 
 #. module: odoo_wechat_enterprise
-#: selection:odoo.wechat.enterprise.message,state:0
+#: selection:odoo.wechat.enterprise.message,status:0
 msgid "Send"
 msgstr "已发送"
 
@@ -473,22 +473,22 @@ msgid "Sequence"
 msgstr "序列"
 
 #. module: odoo_wechat_enterprise
-#: selection:odoo.wechat.enterprise.user,state:0
-msgid "Server No Match"
+#: selection:odoo.wechat.enterprise.user,status:0
+msgid "No Match"
 msgstr "本地未匹配"
 
 #. module: odoo_wechat_enterprise
-#: selection:odoo.wechat.enterprise.user,state:0
-msgid "Stared"
-msgstr "已关注"
+#: selection:odoo.wechat.enterprise.user,status:0
+msgid "已激活"
+msgstr "Active"
 
 #. module: odoo_wechat_enterprise
-#: field:odoo.wechat.enterprise.user,state:0
-msgid "State"
+#: field:odoo.wechat.enterprise.user,status:0
+msgid "Status"
 msgstr "状态"
 
 #. module: odoo_wechat_enterprise
-#: field:odoo.wechat.enterprise.message,state:0
+#: field:odoo.wechat.enterprise.message,status:0
 msgid "Status"
 msgstr "状态"
 
@@ -526,10 +526,10 @@ msgid "URL"
 msgstr "URL"
 
 #. module: odoo_wechat_enterprise
-#: field:odoo.wechat.enterprise.user,user:0
-#: field:odoo.wechat.enterprise.user.wizard,user:0
-msgid "User"
-msgstr "用户"
+#: field:odoo.wechat.enterprise.user,res_user:0
+#: field:odoo.wechat.enterprise.user.wizard,res_user:0
+msgid "Odoo User"
+msgstr "系统用户"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.model,name:odoo_wechat_enterprise.model_res_users

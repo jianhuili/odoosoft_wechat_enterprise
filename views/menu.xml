@@ -161,10 +161,10 @@
         <menuitem id="menuitem_wechat_filter_template_system" name="系统过滤器" parent="menuitem_wechat_enterprise_config" sequence="50"
                   action="action_wechat_filter_template_system"/>
 
-        <menuitem id="menuitem_wechat_home_page" name="官网" parent="menuitem_wechat_enterprise_root" sequence="110"
+        <!-- <menuitem id="menuitem_wechat_home_page" name="官网" parent="menuitem_wechat_enterprise_root" sequence="110"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
         <menuitem id="menuitem_wechat_home_page_enterprise" name="企业号官网" parent="menuitem_wechat_home_page" sequence="20"
-                  action="action_wechat_homepage_enterprise"/>
+                  action="action_wechat_homepage_enterprise"/> -->
 
 <!--
         <act_window id="action_wechat_user_batch_invite"

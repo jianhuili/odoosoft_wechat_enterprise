@@ -13,7 +13,7 @@
                     <field name="mobile"/>
                     <field name="email"/>
                     <field name="account"/>
-                    <field name="state"/>
+                    <field name="status"/>
                 </tree>
             </field>
         </record>
@@ -28,7 +28,7 @@
                         <button name="unlink_force" string="本地强制删除" type="object" />
                         <button name="create_force" string="远程强制创建" type="object" />
                         <button name="write_force" string="远程强制更新" type="object" />
-                        <field name="state" widget="statusbar" readonly="1" statusbar_visible="1,4"/>
+                        <field name="status" widget="statusbar" readonly="1" statusbar_visible="1,4"/>
                     </header>
                     <sheet>
                         <group invisible="1">
@@ -37,7 +37,7 @@
                         <group>
                             <group>
                                 <field name="account" attrs="{'readonly':[('id','!=',False)]}" readonly="0" />
-                                <field name="user" context="{'is_no_wechat_sync':True}" readonly="0" />
+                                <field name="res_user" context="{'is_no_wechat_sync':True}" readonly="0" />
                             </group>
                             <newline/>
                             <group>
