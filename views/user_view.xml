@@ -24,7 +24,7 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="button_invite" string="邀请关注" type="object" class="oe_highlight" states="4"/>
+                        <button name="button_invite" string="邀请关注" type="object" class="oe_highlight" status="4"/>
                         <button name="unlink_force" string="本地强制删除" type="object" />
                         <button name="create_force" string="远程强制创建" type="object" />
                         <button name="write_force" string="远程强制更新" type="object" />

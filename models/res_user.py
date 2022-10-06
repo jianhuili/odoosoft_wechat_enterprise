@@ -8,7 +8,7 @@ class ResUserInherit(models.Model):
     _inherit = 'res.users'
 
     wechat_user = fields.One2many('odoo.wechat.enterprise.user', 'res_user', 'Wechat User')
-    wechat_id = fields.Char('Wechat UserID')
+    wechat_id = fields.Char('Wechat ID')
 
     def __init__(self, pool, cr):
         """ Override of __init__ to add access rights on

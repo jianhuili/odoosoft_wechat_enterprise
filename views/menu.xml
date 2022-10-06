@@ -60,7 +60,7 @@
             <field name="domain">[('is_template','=',False),('is_system','=',False)]</field>
         </record>
 
-        <record id="action_wechat_enterprise_template" model="ir.actions.act_window">
+        <record id="action_wechat_enterprise_msg_template" model="ir.actions.act_window">
             <field name="name">消息模板</field>
             <field name="res_model">odoo.wechat.enterprise.message.template</field>
             <!-- <field name="view_type">form</field> -->
@@ -126,8 +126,8 @@
 
         <menuitem id="menuitem_wechat_en_template_root" name="模板" parent="menuitem_wechat_enterprise_root" sequence="70"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
-        <menuitem id="menuitem_wechat_en_template_manage" name="消息模板" parent="menuitem_wechat_en_template_root" sequence="30"
-                  action="action_wechat_enterprise_template"/>
+        <menuitem id="menuitem_wechat_en_msg_template_manage" name="消息模板" parent="menuitem_wechat_en_template_root" sequence="30"
+                  action="action_wechat_enterprise_msg_template"/>
         <menuitem id="menuitem_wechat_filter_template" name="过滤器模板" parent="menuitem_wechat_en_template_root" sequence="30"
                   action="action_wechat_filter_template"/>
 

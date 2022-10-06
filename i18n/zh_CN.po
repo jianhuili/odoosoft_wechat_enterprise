@@ -560,7 +560,7 @@ msgstr "语音"
 #: field:odoo.wechat.enterprise.user.wizard,wechat_id:0
 #: field:res.users,wechat_id:0
 #: field:res.users,wechat_user:0
-msgid "Wechat Account"
+msgid "Wechat ID"
 msgstr "微信账号"
 
 #. module: odoo_wechat_enterprise
@@ -1103,6 +1103,11 @@ msgid "模板"
 msgstr "模板"
 
 #. module: odoo_wechat_enterprise
+#: model:ir.ui.menu,name:odoo_wechat_enterprise.menuitem_wechat_en_msg_template_manage
+msgid "消息模板"
+msgstr "消息模板"
+
+#. module: odoo_wechat_enterprise
 #: model:ir.ui.menu,name:odoo_wechat_enterprise.menuitem_wechat_en_message
 msgid "消息"
 msgstr "消息"
@@ -1113,7 +1118,7 @@ msgid "消息内容"
 msgstr "消息内容"
 
 #. module: odoo_wechat_enterprise
-#: model:ir.actions.act_window,name:odoo_wechat_enterprise.action_wechat_enterprise_template
+#: model:ir.actions.act_window,name:odoo_wechat_enterprise.action_wechat_enterprise_msg_template
 msgid "消息模板"
 msgstr "消息模板"
 

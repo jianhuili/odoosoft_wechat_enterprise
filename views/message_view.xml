@@ -25,9 +25,9 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="sent_message" string="发送" type="object" states="draft"
+                        <button name="sent_message" string="发送" type="object" status="draft"
                                 />
-                        <button name="sent_message" string="重发" type="object" states="send,fail"
+                        <button name="sent_message" string="重发" type="object" status="send,fail"
                                 />
                         <field name="status" widget="statusbar" readonly="1"/>
                     </header>
