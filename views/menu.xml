@@ -17,7 +17,7 @@
         </record>
 
         <record id="action_wechat_enterprise_log" model="ir.actions.act_window">
-            <field name="name">记录</field>
+            <field name="name">日志</field>
             <field name="res_model">odoo.wechat.enterprise.log</field>
             <field name="view_mode">tree</field>
         </record>
@@ -121,33 +121,33 @@
 
         <menuitem id="menuitem_wechat_en_filter" name="过滤器" parent="menuitem_wechat_enterprise_root" sequence="60"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
-        <menuitem id="menuitem_wechat_en_filter_manage" name="过滤器" parent="menuitem_wechat_en_filter" sequence="20"
+        <menuitem id="menuitem_wechat_en_filter_manage" name="消息过滤器" parent="menuitem_wechat_en_filter" sequence="20"
                   action="action_wechat_enterprise_filter"/>
-        <menuitem id="menuitem_wechat_filter_template" name="过滤器模板" parent="menuitem_wechat_en_filter" sequence="30"
-                  action="action_wechat_filter_template"/>
 
         <menuitem id="menuitem_wechat_en_template_root" name="模板" parent="menuitem_wechat_enterprise_root" sequence="70"
-                  groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
-        <menuitem id="menuitem_wechat_en_template_manage" name="模板" parent="menuitem_wechat_en_template_root" sequence="30"
+                  groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
+        <menuitem id="menuitem_wechat_en_template_manage" name="消息模板" parent="menuitem_wechat_en_template_root" sequence="30"
                   action="action_wechat_enterprise_template"/>
+        <menuitem id="menuitem_wechat_filter_template" name="过滤器模板" parent="menuitem_wechat_en_template_root" sequence="30"
+                  action="action_wechat_filter_template"/>
 
         <menuitem id="menuitem_wechat_en_user" name="通讯录" parent="menuitem_wechat_enterprise_root" sequence="70"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
+        <menuitem id="menuitem_wechat_department" name="部门" parent="menuitem_wechat_en_user" sequence="50"
+                  action="action_wechat_department"/>
         <menuitem id="menuitem_wechat_en_user_manage" name="所有用户" parent="menuitem_wechat_en_user" sequence="20"
                   action="action_wechat_enterprise_user"/>
         <menuitem id="menuitem_wechat_batch_user" name="批量创建用户" parent="menuitem_wechat_en_user" sequence="30"
                   action="action_wechat_batch_user"/>
         <menuitem id="menuitem_wechat_force_create_user" name="强制创建用户" parent="menuitem_wechat_en_user" sequence="40"
                   action="action_wechat_force_create_user"/>
-        <menuitem id="menuitem_wechat_department" name="部门" parent="menuitem_wechat_en_user" sequence="50"
-                  action="action_wechat_department"/>
         <menuitem id="menuitem_wechat_server_sync" name="手动同步服务器用户数据" parent="menuitem_wechat_en_user" sequence="60"
                   action="action_sync_wechat_server_manual"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
 
-        <menuitem id="menuitem_wechat_log_root" name="记录" parent="menuitem_wechat_enterprise_root" sequence="80"
+        <menuitem id="menuitem_wechat_log_root" name="日志" parent="menuitem_wechat_enterprise_root" sequence="80"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
-        <menuitem id="menuitem_wechat_log_user" name="Log" parent="menuitem_wechat_log_root" sequence="20"
+        <menuitem id="menuitem_wechat_log_user" name="日志" parent="menuitem_wechat_log_root" sequence="20"
                   action="action_wechat_enterprise_log"/>
 
         <menuitem id="menuitem_wechat_enterprise_config" name="设置" parent="menuitem_wechat_enterprise_root" sequence="100"

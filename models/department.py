@@ -34,7 +34,7 @@ class WechatDepartment(models.Model):
             SELECT DISTINCT parent_id
             FROM odoo_wechat_enterprise_department
             WHERE id IN %s AND parent_id IS NOT NULL""", [tuple(ids), ])
-            ids = map(itemgetter(0), self.env.cr.fetchall())
+            ids = list(map(itemgetter(0), self.env.cr.fetchall()))
             if not level:
                 raise exceptions.Warning(_('Error! You cannot create recursive Type.'))
             level -= 1

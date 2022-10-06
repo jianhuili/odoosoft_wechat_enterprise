@@ -13,14 +13,14 @@ _logger = logging.getLogger(__name__)
 
 class WechatUser(models.Model):
     _name = 'odoo.wechat.enterprise.user'
-    #_rec_name = 'login'
+    _rec_name = 'user_code'
 
     state = fields.Selection([('1', 'Stared'), ('4', 'Not Stared'), ('2', 'Frozen'), ('10', 'Server No Match')], 'State', default='4')
 
     user_code = fields.Char('User ID', required=True)
     name = fields.Char('Name', required=True)
 
-    user = fields.Many2one('res.users', 'User')
+    user = fields.Many2one('res.users', 'Odoo User')
     mobile = fields.Char('Mobile')
     email = fields.Char('Email')
     wechat_id = fields.Char('Wechat ID')
@@ -42,7 +42,6 @@ class WechatUser(models.Model):
         self.email = self.user.email
         self.wechat_id = self.user.wechat_id
 
-
     @api.constrains('wechat_id', 'mobile', 'email')
     def _check_wechat_info(self):
         if not self.wechat_id and not self.mobile and not self.email:
@@ -52,7 +51,7 @@ class WechatUser(models.Model):
     def create_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             client = WeChatClient(self.account.corpid, self.account.secret)
-            client.user.create(user_code=self.user_code, name=self.name, department=[d.id for d in self.departments] or [1], position=self.job,
+            client.user.create(user_id=self.user_code, name=self.name, department=[d.id for d in self.departments] or [1], position=self.job,
                                mobile=self.mobile, email=self.email, wechat_id=self.wechat_id)
 
     @api.model
@@ -61,7 +60,6 @@ class WechatUser(models.Model):
             client = WeChatClient(account.corpid, account.secret)
             client.user.batch_delete(user_ids=userids)
 
-    # @api.model_create_multi
     def write_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             for record in self:

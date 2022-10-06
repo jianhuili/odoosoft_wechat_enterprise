@@ -1146,8 +1146,8 @@ msgstr "系统过滤器"
 #. module: odoo_wechat_enterprise
 #: model:ir.actions.act_window,name:odoo_wechat_enterprise.action_wechat_enterprise_log
 #: model:ir.ui.menu,name:odoo_wechat_enterprise.menuitem_wechat_log_root
-msgid "记录"
-msgstr "记录"
+msgid "日志"
+msgstr "日志"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.ui.menu,name:odoo_wechat_enterprise.menuitem_wechat_enterprise_config
