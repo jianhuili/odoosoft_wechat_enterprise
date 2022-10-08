@@ -45,9 +45,9 @@
                             </group>
                         </group>
                         <group>
+                            <field name="res_users" widget="many2many_tags" readonly="0" />
                             <field name="departments" widget="many2many_tags" readonly="0" />
                             <field name="users" widget="many2many_tags" readonly="0" />
-                            <field name="res_users" widget="many2many_tags" readonly="0" />
                         </group>
                         <group attrs="{'invisible':[('type','not in', ['news', 'text'])]}" col="1">
                             <separator string="消息内容"/>

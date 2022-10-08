@@ -26,9 +26,9 @@ class Message(models.Model):
     res_users = fields.Many2many('res.users', 'rel_wechat_ep_res_user', 'message_id', 'user_id', 'Odoo Users')
     create_user = fields.Many2one('res.users', 'Create User')
 
-    # res_model = fields.Char('Res Model Name')
-    # res_id = fields.Integer('Res Id')
-    # res_name = fields.Char('Res Name')
+    res_model = fields.Char('Res Model Name')
+    res_id = fields.Integer('Res Id')
+    res_name = fields.Char('Res Name')
 
     # News Template
     title = fields.Char('Title')
@@ -62,17 +62,17 @@ class Message(models.Model):
                     client = WeChatClient(message.account.corpid, message.account.app_secret)
                     # TODO: all support
                     if message.type == 'text':
-                        client.message.send_text(message.account.id, user_ids,
+                        client.message.send_text(message.account.agentid, user_ids,
                                                  party_ids='|'.join([str(d.id) for d in message.departments]), content=message.text_message_content())
                     elif message.type == 'news':
-                        client.message.send_articles(message.account.id, user_ids,
+                        client.message.send_articles(message.account.agentid, user_ids,
                                                      party_ids='|'.join([str(d.id) for d in message.departments]),
                                                      articles=message.news_message_content())
                     elif message.type == 'image':
                         if self.file:
                             media_file = ('test.jpg', base64.b64decode(self.file[0].datas))
                             result = client.media.upload(media_type='image', media_file=media_file)
-                            client.message.send_image(message.account.id, user_ids,
+                            client.message.send_image(message.account.agentid, user_ids,
                                                       media_id=result['media_id'],
                                                       party_ids='|'.join([str(d.id) for d in message.departments]),
                                                       )
@@ -93,9 +93,9 @@ class Message(models.Model):
         have_mobile = self.sudo().env['ir.module.module'].search([('status', '=', 'installed'), ('name', '=', 'odoo_mobile')])
         if self.template.url:
             index = self.sudo().env['ir.config_parameter'].get_param('wechat.base.url') + self.template.url.format(**{
-                # 'res_id': self.res_id,
-                # 'res_model': self.res_model,
-                # 'res_name': self.res_name,
+                'res_id': self.res_id,
+                'res_model': self.res_model,
+                'res_name': self.res_name,
                 'account_code': self.account.code
             })
         else:
@@ -169,9 +169,9 @@ class Message(models.Model):
                 'res_users': [(6, 0, list(set(user_ids + group_users)))],
                 'content': content,
                 'create_user': self.env.uid,
-                # 'res_model': obj._name if obj else False,
-                # 'res_id': obj.id if obj else False,
-                # 'res_name': obj.name_get()[0][1] if obj else False,
+                'res_model': obj._name if obj else False,
+                'res_id': obj.id if obj else False,
+                'res_name': obj.name_get()[0][1] if obj else False,
                 'type': type,
                 'template': template,
                 'title': title,
