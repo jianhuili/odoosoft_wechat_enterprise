@@ -110,9 +110,14 @@ msgid "corpid"
 msgstr "企业ID"
 
 #. module: odoo_wechat_enterprise
-#: field:odoo.wechat.enterprise.account,secret:0
-msgid "secret"
-msgstr "Secret"
+#: field:odoo.wechat.enterprise.account,app_secret:0
+msgid "App Secret"
+msgstr "应用密钥"
+
+#. module: odoo_wechat_enterprise
+#: field:odoo.wechat.enterprise.account,address_secret:0
+msgid "Address Book Secret"
+msgstr "通讯密钥"
 
 #. module: odoo_wechat_enterprise
 #: field:odoo.wechat.enterprise.account,agentId:0

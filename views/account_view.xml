@@ -26,12 +26,13 @@
                             <field name="name" readonly="0" />
                             <field name="code" readonly="0" />
                             <field name="corpid" readonly="0"/>
+                            <field name="address_secret" readonly="0" />
                             <field name="agentid" readonly="0" />
-                            <field name="secret"  readonly="0" />
+                            <field name="app_secret"  readonly="0" />
                             <field name="token" readonly="0" />
                             <field name="ase_key" readonly="0" />
                             <field name="remark" readonly="0" />
-                            <field name="filters" readonly="1"/>
+                            <!-- <field name="filters" readonly="1"/> -->
                         </group>
                         <div>
                             <p>回调地址为:<field name="callback_url"/></p>

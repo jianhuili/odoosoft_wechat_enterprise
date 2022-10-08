@@ -59,7 +59,7 @@ class Message(models.Model):
             message.users = target_users
             if target_users or message.departments:
                 try:
-                    client = WeChatClient(message.account.corpid, message.account.secret)
+                    client = WeChatClient(message.account.corpid, message.account.app_secret)
                     # TODO: all support
                     if message.type == 'text':
                         client.message.send_text(message.account.id, user_ids,

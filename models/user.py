@@ -50,9 +50,9 @@ class WechatUser(models.Model):
   
     def create_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
-            client = WeChatClient(self.account.corpid, self.account.secret)
+            client = WeChatClient(self.account.corpid, self.account.address_secret)
             client.user.create(user_id=self.user_code, name=self.name, department=[d.id for d in self.departments] or [1], position=self.job,
-                               mobile=self.mobile, email=self.email, wechat_id=self.wechat_id)
+                                mobile=self.mobile, email=self.email, wechat_id=self.wechat_id)
 
     @api.model
     def unlink_wechat_account(self, userids, account):
@@ -63,7 +63,7 @@ class WechatUser(models.Model):
     def write_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             for record in self:
-                client = WeChatClient(record.account.corpid, record.account.secret)
+                client = WeChatClient(record.account.corpid, record.account.address_secret)
                 # is user exist
                 wechat_user_info = client.user.get(record.user_code)
                 # if exist, update
@@ -163,7 +163,7 @@ class WechatUser(models.Model):
     def button_invite(self):
         for record in self:
             try:
-                record.account.get_client().user.invite(user_code=record.user_code)
+                record.account.get_client().batch.invite(user=[record.user_code])
             except WeChatClientException as e:
                 if e.errcode == 60119:  # message: contact already joined
                     record.status = '1'
@@ -313,7 +313,6 @@ class UserCreateWizard(models.TransientModel):
         res['res_id'] = self[0].id
         return res
 
-   
     def button_batch_create_fast(self):
         processed_users = []
         result = ''
@@ -348,7 +347,7 @@ class UserCreateWizard(models.TransientModel):
                 csv_file += u'%s,%s,%s,%s,%s,%s,\n' % (user.name, user.user_code, user.wechat_id or '', user.mobile or '', user.email or '', 1)
             csv_file = ('temp.csv', csv_file)
             # upload csv file
-            client = WeChatClient(self.account.corpid, self.account.secret)
+            client = WeChatClient(self.account.corpid, self.account.address_secret)
             media = client.media.upload(media_type='file', media_file=csv_file)
             app = self.env.ref('odoo_wechat_enterprise.account_default')
             job_id = client.batch.sync_user(encoding_aes_key=app.ase_key, media_id=media['media_id'], token=app.token, url=app.token)['jobid']

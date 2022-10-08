@@ -11,11 +11,12 @@ class WechatAccount(models.Model):
     name = fields.Char('Name', required=True)
     corpid = fields.Char('CorpID', required=True)
     agentid = fields.Char('AgentId', required=True)
-    secret = fields.Char('Secret', required=True)
+    app_secret = fields.Char('App Secret', required=True)
+    address_secret = fields.Char('AddressBook Secret', required=True)
     token = fields.Char('Token', required=True)
     ase_key = fields.Char('EncodingAESKey', required=True)
     remark = fields.Char('Remark')
-    filters = fields.One2many('odoo.wechat.enterprise.filter', 'account', 'Filters')
+    # filters = fields.One2many('odoo.wechat.enterprise.filter', 'account', 'Filters')
     callback_url = fields.Char(string='Callback url', compute='_compute_url')
     _sql_constraints = [('wechat_account_code_unique', 'unique(code)', _('Code must be unique !'))]
 
@@ -24,13 +25,13 @@ class WechatAccount(models.Model):
     def get_client_by_code(self, name):
         account = self.search([('name', '=', name)])
         if account:
-            return WechatAccount(account.corpid, account.secret)
+            return WeChatClient(account.corpid, account.app_secret)
         else:
             return None
 
     @tools.ormcache()
     def get_client(self):
-        return WechatAccount(self.corpid, self.secret)
+        return WeChatClient(self.corpid, self.app_secret)
 
     def _compute_url(self):
         address = self.env['ir.config_parameter'].get_param('wechat.base.url')

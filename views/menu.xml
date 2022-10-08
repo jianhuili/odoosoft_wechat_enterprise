@@ -119,17 +119,21 @@
         <menuitem id="menuitem_wechat_en_message_manage" name="所有消息" parent="menuitem_wechat_en_message" sequence="20"
                   action="action_wechat_enterprise_message"/>
 
+        <!--
         <menuitem id="menuitem_wechat_en_filter" name="过滤器" parent="menuitem_wechat_enterprise_root" sequence="60"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
         <menuitem id="menuitem_wechat_en_filter_manage" name="消息过滤器" parent="menuitem_wechat_en_filter" sequence="20"
                   action="action_wechat_enterprise_filter"/>
+         -->
 
         <menuitem id="menuitem_wechat_en_template_root" name="模板" parent="menuitem_wechat_enterprise_root" sequence="70"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
         <menuitem id="menuitem_wechat_en_msg_template_manage" name="消息模板" parent="menuitem_wechat_en_template_root" sequence="30"
                   action="action_wechat_enterprise_msg_template"/>
+<!--    
         <menuitem id="menuitem_wechat_filter_template" name="过滤器模板" parent="menuitem_wechat_en_template_root" sequence="30"
                   action="action_wechat_filter_template"/>
+-->
 
         <menuitem id="menuitem_wechat_en_user" name="通讯录" parent="menuitem_wechat_enterprise_root" sequence="70"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
@@ -137,29 +141,36 @@
                   action="action_wechat_department"/>
         <menuitem id="menuitem_wechat_en_user_manage" name="所有用户" parent="menuitem_wechat_en_user" sequence="20"
                   action="action_wechat_enterprise_user"/>
-        <menuitem id="menuitem_wechat_batch_user" name="批量创建用户" parent="menuitem_wechat_en_user" sequence="30"
+        <!--
+            <menuitem id="menuitem_wechat_batch_user" name="批量创建用户" parent="menuitem_wechat_en_user" sequence="30"
                   action="action_wechat_batch_user"/>
-        <menuitem id="menuitem_wechat_force_create_user" name="强制创建用户" parent="menuitem_wechat_en_user" sequence="40"
+         -->
+        <!-- 
+            <menuitem id="menuitem_wechat_force_create_user" name="强制创建用户" parent="menuitem_wechat_en_user" sequence="40"
                   action="action_wechat_force_create_user"/>
+         -->
         <menuitem id="menuitem_wechat_server_sync" name="手动同步服务器用户数据" parent="menuitem_wechat_en_user" sequence="60"
                   action="action_sync_wechat_server_manual"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
 
-        <menuitem id="menuitem_wechat_log_root" name="日志" parent="menuitem_wechat_enterprise_root" sequence="80"
+        <!--
+        <<menuitem id="menuitem_wechat_log_root" name="日志" parent="menuitem_wechat_enterprise_root" sequence="80"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
         <menuitem id="menuitem_wechat_log_user" name="日志" parent="menuitem_wechat_log_root" sequence="20"
                   action="action_wechat_enterprise_log"/>
+        -->
 
         <menuitem id="menuitem_wechat_enterprise_config" name="设置" parent="menuitem_wechat_enterprise_root" sequence="100"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
         <menuitem id="menuitem_wechat_en_account" name="账户" parent="menuitem_wechat_enterprise_config" sequence="20"
                   action="action_wechat_enterprise_account"/>
+                  
         <!-- <menuitem id="menuitem_wechat_en_application" name="应用" parent="menuitem_wechat_enterprise_config" sequence="30"
                   action="action_wechat_enterprise_application"/> -->
-        <menuitem id="menuitem_wechat_en_map" name="模块关联" parent="menuitem_wechat_enterprise_config" sequence="40"
+        <!-- <menuitem id="menuitem_wechat_en_map" name="模块关联" parent="menuitem_wechat_enterprise_config" sequence="40"
                   action="action_wechat_enterprise_map"/>
         <menuitem id="menuitem_wechat_filter_template_system" name="系统过滤器" parent="menuitem_wechat_enterprise_config" sequence="50"
-                  action="action_wechat_filter_template_system"/>
+                  action="action_wechat_filter_template_system"/> -->
 
         <!-- <menuitem id="menuitem_wechat_home_page" name="官网" parent="menuitem_wechat_enterprise_root" sequence="110"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>

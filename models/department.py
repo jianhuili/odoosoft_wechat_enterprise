@@ -42,7 +42,7 @@ class WechatDepartment(models.Model):
   
     def create_wechat(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
-            client = WeChatClient(self.account.corpid, self.account.secret)
+            client = WeChatClient(self.account.corpid, self.account.address_secret)
             client.department.create(name=self.name, parent_id=self.parent_id.id or 1, order=self.order, id=self.id)
             for user in self.users:
                 client.user.update(user.user_code, department=[d.id for d in user.departments] or [1])
@@ -51,7 +51,7 @@ class WechatDepartment(models.Model):
     def write_wechat(self, vals, department_old_user):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             for department in self:
-                client = WeChatClient(department.account.corpid, department.account.secret)
+                client = WeChatClient(department.account.corpid, department.account.address_secret)
                 client.department.update(department.id, name=department.name, parent_id=department.parent_id.id or 1, order=department.order)
                 if 'users' in vals:
                     old_user = department_old_user[department]
@@ -65,7 +65,7 @@ class WechatDepartment(models.Model):
     def unlink_wechat(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
             for department in self:
-                client = WeChatClient(department.account.corpid, department.account.secret)
+                client = WeChatClient(department.account.corpid, department.account.address_secret)
                 for user in department.users:
                     client.user.update(user.user_code, department=[d.id for d in user.departments if d.id != department.id] or [1])
                 client.department.delete(department.id)

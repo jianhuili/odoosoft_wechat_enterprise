@@ -11,18 +11,18 @@ _logger = logging.getLogger(__name__)
 
 
 class WechatControllers(http.Controller):
-    @http.route('/wechat_enterprise/<string:code>/api', type='http', auth="public", methods=['GET', 'POST'])
+    @http.route('/wechat_enterprise/<string:code>/api', type='http', auth="public", csrf=False, methods=['GET', 'POST'])
     def process(self, request, code, msg_signature, timestamp, nonce, echostr=None):
         _logger.debug('WeChat Enterprise connected:  code=%s, msg_signature=%s, timestamp=%s, nonce=%s, echostr=%s', code, msg_signature, timestamp,
                       nonce, echostr)
         request.uid = 1
-        account_obj = request.registry['odoo.wechat.enterprise.account']
-        account = account_obj.search(request.cr, request.uid, [('code', '=', code)], context=request.context)
-        if not account:
+        account_obj = request.env['odoo.wechat.enterprise.account']
+        accounts = account_obj.search([('code', '=', code)])
+        if not accounts:
             _logger.warning('Cant not find webchat account.')
             abort(403)
         else:
-            account = account_obj.browse(request.cr, request.uid, account[0], context=request.context)
+            account = accounts[0]
         wechat_crypto = WeChatCrypto(account.token, account.ase_key, account.corpid)
 
         if request.httprequest.method == 'GET':
@@ -57,27 +57,27 @@ class WechatControllers(http.Controller):
                     return ''
             except (InvalidSignatureException, InvalidCorpIdException) as e:
                 _logger.warning('decrypt_message fail. %s', e)
-                request.registry['odoo.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', 'decrypt_message fail. %s' % e,
+                request.env['odoo.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', 'decrypt_message fail. %s' % e,
                                                                             context=request.context)
                 return ''
             except Exception as e:
                 _logger.error('process_request error: %s', e)
-                request.registry['odoo.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', 'process_request error: %s' % e,
+                request.env['odoo.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', 'process_request error: %s' % e,
                                                                             context=request.context)
                 return ''
 
-    @http.route('/wechat_enterprise/<string:code>/api/debug', type='http', auth="public", methods=['GET', 'POST'])
+    @http.route('/wechat_enterprise/<string:code>/api/debug', type='http', auth="public", csrf=False, methods=['GET', 'POST'])
     def process_debug(self, request, code, msg_signature, timestamp, nonce, msg=None, echostr=None):
         _logger.debug('WeChat Enterprise connected:  code=%s, msg_signature=%s, timestamp=%s, nonce=%s, echostr=%s', code, msg_signature, timestamp,
                       nonce, echostr)
         request.uid = 1
-        account_obj = request.registry['odoo.wechat.enterprise.account']
-        account = account_obj.search(request.cr, request.uid, [('code', '=', code)], context=request.context)
-        if not account:
+        account_obj = request.env['odoo.wechat.enterprise.account']
+        accounts = account_obj.search([('code', '=', code)])
+        if not accounts:
             _logger.warning('Cant not find account.')
             abort(403)
         else:
-            account = account_obj.browse(request.cr, request.uid, account[0], context=request.context)
+            account = accounts[0]
         # wechat_crypto = WeChatCrypto(account.token, account.ase_key, account.corpid)
 
         try:
@@ -87,15 +87,12 @@ class WechatControllers(http.Controller):
                 # reply_msg = reply_msg[0]
                 reply = create_reply(reply_msg, msg).render()
                 _logger.info('reply_msg is %s', reply)
-                request.registry['odoo.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', reply,
-                                                                            context=request.context)
+                request.env['odoo.wechat.enterprise.log'].log_info(u'过滤器', reply)
                 return ''
             else:
-                request.registry['odoo.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', 'reply_msg is None',
-                                                                            context=request.context)
+                request.env['odoo.wechat.enterprise.log'].log_info(u'过滤器', 'reply_msg is None')
                 _logger.info('reply_msg is None')
         except Exception as e:
             _logger.error('process_request error: %s', e)
-            request.registry['odoo.wechat.enterprise.log'].log_info(request.cr, 1, u'过滤器', 'process_request error: %s' % e,
-                                                                        context=request.context)
+            request.env['odoo.wechat.enterprise.log'].log_info(u'过滤器', 'process_request error: %s' % e)
             return ''
