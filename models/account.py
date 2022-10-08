@@ -7,13 +7,13 @@ from wechatpy.enterprise import WeChatClient
 
 class WechatAccount(models.Model):
     _name = 'odoo.wechat.enterprise.account'
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True)
+    code = fields.Char('Company Code', required=True)
+    name = fields.Char('Company Name', required=True)
     corpid = fields.Char('CorpID', required=True)
     agentid = fields.Char('AgentId', required=True)
     app_secret = fields.Char('App Secret', required=True)
     address_secret = fields.Char('AddressBook Secret', required=True)
-    token = fields.Char('Token', required=True)
+    token = fields.Char('Callback Token', required=True)
     ase_key = fields.Char('EncodingAESKey', required=True)
     remark = fields.Char('Remark')
     # filters = fields.One2many('odoo.wechat.enterprise.filter', 'account', 'Filters')

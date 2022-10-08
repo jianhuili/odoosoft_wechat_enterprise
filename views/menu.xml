@@ -106,7 +106,7 @@
             <field name="name">Sync Wechat Server Manual</field>
             <!-- <field name="condition">True</field> -->
             <field name="model_id" ref="model_odoo_wechat_enterprise_user"/>
-            <field name="code">self.pool["odoo.wechat.enterprise.user"].sync_wechat_server(cr, uid, context=context)</field>
+            <field name="code">env["odoo.wechat.enterprise.user"].sync_wechat_server()</field>
             <field name="state">code</field>
             <field name="type">ir.actions.server</field>
         </record>
@@ -134,7 +134,6 @@
         <menuitem id="menuitem_wechat_filter_template" name="过滤器模板" parent="menuitem_wechat_en_template_root" sequence="30"
                   action="action_wechat_filter_template"/>
 -->
-
         <menuitem id="menuitem_wechat_en_user" name="通讯录" parent="menuitem_wechat_enterprise_root" sequence="70"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
         <menuitem id="menuitem_wechat_department" name="部门" parent="menuitem_wechat_en_user" sequence="50"
@@ -149,7 +148,7 @@
             <menuitem id="menuitem_wechat_force_create_user" name="强制创建用户" parent="menuitem_wechat_en_user" sequence="40"
                   action="action_wechat_force_create_user"/>
          -->
-        <menuitem id="menuitem_wechat_server_sync" name="手动同步服务器用户数据" parent="menuitem_wechat_en_user" sequence="60"
+          <menuitem id="menuitem_wechat_server_sync" name="手动同步服务器" parent="menuitem_wechat_en_user" sequence="60"
                   action="action_sync_wechat_server_manual"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
 

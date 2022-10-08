@@ -28,6 +28,7 @@
                         <button name="unlink_force" string="本地强制删除" type="object" />
                         <button name="create_force" string="远程强制创建" type="object" />
                         <button name="write_force" string="远程强制更新" type="object" />
+                        <button name="sync_wechat_server" string="同步服务器用户数据" type="object" />
                         <field name="status" widget="statusbar" readonly="1" statusbar_visible="1,4"/>
                     </header>
                     <sheet>

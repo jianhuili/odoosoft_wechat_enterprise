@@ -45,8 +45,8 @@ class WechatUser(models.Model):
     @api.constrains('wechat_id', 'mobile', 'email')
     def _check_wechat_info(self):
         if not self.wechat_id and not self.mobile and not self.email:
-            raise exceptions.Warning(_('wechat_id, mobile, email can not be all none'))
-
+            # raise exceptions.Warning(_('wechat_id, mobile, email can not be all none'))
+            _logger.warn('wechat_id, mobile, email are all none. UserId:%', self.user_code)
   
     def create_wechat_account(self):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
@@ -170,7 +170,6 @@ class WechatUser(models.Model):
                 else:
                     raise e
 
-    @api.model
     def sync_wechat_server(self):
         """
         sync wechat server user info to local database
@@ -184,8 +183,8 @@ class WechatUser(models.Model):
                                                                         ['status', 'user_code', 'name', 'mobile', 'email', 'wechat_id', 'job', ])}
                 for server_value in server_values:
                     # if someone on server and in local
-                    if server_value['user_code'] in local_values:
-                        user_code = server_value['user_code']
+                    if server_value['userid'] in local_values:
+                        user_code = server_value['userid']
                         temp_server_value = {
                             'wechat_id': server_value.get('wechat_id', False),
                             'name': server_value['name'],
@@ -195,7 +194,7 @@ class WechatUser(models.Model):
                             'status': str(server_value['status']),
                         }
                         temp_local_value = {
-                            'wechat_id': local_values[user_code]['wechat_login'],
+                            'wechat_id': local_values[user_code]['wechat_id'],
                             'name': local_values[user_code]['name'],
                             'mobile': local_values[user_code].get('mobile', False) or False,
                             'job': local_values[user_code].get('job', False) or False,
@@ -208,14 +207,31 @@ class WechatUser(models.Model):
                                 is_no_wechat_sync=True).write(temp_server_value)
                         # un registry local value
                         del local_values[user_code]
+
                     # if someone on server but not in local
                     else:
-                        _logger.warning('miss match server user:%s', server_value['user_code'])
-                        self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户', u'服务器用户:%s没有在本机找到对应关系' % server_value['user_code'])
+                        _logger.info('Add missing server user:%s', server_value['userid'])
+                        # self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户', u'服务器用户:%s没有在本机找到对应关系' % server_value['userid'])
+                        self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户', u'添加本地不存在用户:%s' % server_value['userid'])
+
+                        new_user_value = {
+                            'account' : account.id,
+                            'user_code': server_value['userid'],
+                            'wechat_id': server_value.get('wechat_id', False),
+                            'name': server_value['name'],
+                            'mobile': server_value.get('mobile', False),
+                            'job': server_value.get('position', False),
+                            'email': server_value.get('email', False),
+                            'status': str(server_value['status']),
+                        }
+
+                        self.env['odoo.wechat.enterprise.user'].with_context(is_no_wechat_sync=True).create(new_user_value)
+
                 # if someone on local but not on server
                 if local_values:
                     mismatch_ids = [v['id'] for v in local_values.values()]
                     self.with_context(is_no_wechat_sync=True).browse(mismatch_ids).write({'status': '10'})
+
             except WeChatClientException as e:
                 _logger.error('Get error in sync from server', e)
                 self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户', str(e))
