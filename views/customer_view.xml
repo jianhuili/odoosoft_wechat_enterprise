@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_wechat_enterprise_customer_tree" model="ir.ui.view">
+            <field name="name">view.odoo.wechat.enterprise.customer.tree</field>
+            <field name="model">odoo.wechat.enterprise.customer</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="account"/>
+                    <field name="external_userid"/>   
+                    <field name="name"/>
+                    <field name="gender"/>
+                    <field name="position"/>
+                    <field name="corp_name"/>
+                    <field name="corp_full_name"/>
+                    <field name="mobile"/>
+                    <field name="follow_user"/>
+                    <field name="unassigned_flag"/>
+                    <field name="remark"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_wechat_enterprise_customer_form" model="ir.ui.view">
+            <field name="name">view.odoo.wechat.enterprise.customer.form</field>
+            <field name="model">odoo.wechat.enterprise.customer</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="sync_wechat_server" string="同步服务器用户数据" type="object" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="account"  />
+                                <field name="follow_user"/>
+                            </group>
+                            <newline/>
+                            <group>
+                                <field name="external_userid"/>
+                                <field name="name"/>
+                                <field name="gender" />
+                                <field name="position" />
+                                <field name="corp_name"  />
+                                <field name="corp_full_name"  />
+                                <field name="mobile"/>
+                                <field name="follow_user"/>
+                                <field name="remark"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

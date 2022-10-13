@@ -6,13 +6,13 @@
             <field name="model">odoo.wechat.enterprise.user</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="account"/>
                     <field name="user_code"/>   
                     <field name="name"/>
                     <!-- <field name="user"/> -->
                     <field name="wechat_id"/>
                     <field name="mobile"/>
                     <field name="email"/>
-                    <field name="account"/>
                     <field name="status"/>
                 </tree>
             </field>

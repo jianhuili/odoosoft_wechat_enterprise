@@ -4,7 +4,7 @@ from io import StringIO
 import logging
 
 from urllib import parse
-from odoo import tools
+from odoo import tools, exceptions
 from odoo import models, fields, api
 from odoo.tools.translate import _
 from wechatpy.enterprise import WeChatClient
@@ -19,18 +19,21 @@ class Message(models.Model):
     status = fields.Selection([('draft', 'Draft'), ('send', 'Send'), ('fail', 'Fail')], 'Status', default='draft')
     type = fields.Selection([('text', 'Text'), ('news', 'News'), ('image', 'Image')], 'Message Type', default='text', required=True)
 
+    dest_type = fields.Selection([('external', 'External'), ('internal', 'Internal')], default='external',required=True)
     account = fields.Many2one('odoo.wechat.enterprise.account', 'Account', required=True)
     users = fields.Many2many('odoo.wechat.enterprise.user', 'rel_wechat_ep_message_user', 'message_id', 'user_code', 'Users')
     departments = fields.Many2many('odoo.wechat.enterprise.department', 'rel_wechat_ep_message_department', 'message_id', 'department_id',
                                    'Departments')
-    res_users = fields.Many2many('res.users', 'rel_wechat_ep_res_user', 'message_id', 'user_id', 'Odoo Users')
+    customers = fields.Many2many('odoo.wechat.enterprise.customer', 'rel_wechat_ep_message_customer', 'message_id', 'external_user_id', 'Customers')
+
+    res_users = fields.Many2many('res.users', 'rel_wechat_ep_res_user', 'message_id', 'user_id', 'Res Users')
     create_user = fields.Many2one('res.users', 'Create User')
 
     res_model = fields.Char('Res Model Name')
     res_id = fields.Integer('Res Id')
     res_name = fields.Char('Res Name')
 
-    # News Template
+    # Message content
     title = fields.Char('Title')
     content = fields.Text('Content')
     template = fields.Many2one('odoo.wechat.enterprise.message.template', 'Message Template')
@@ -145,15 +148,19 @@ class Message(models.Model):
         return [article]
 
     @api.model
-    def create_message(self, obj, content, code, user_ids=None, type='text', template=None, title=None, group_ids=None):
+    def create_message(self, obj, content, account_code, user_ids=None, type='text', template=None, title=None, group_ids=None):
         sudo_user = self.sudo()
         group_users = []
         if not user_ids:
             user_ids = []
-        if isinstance(code, int):
-            account = sudo_user.env['odoo.wechat.enterprise.map'].browse(code).account
+
+        accounts = sudo_user.env['odoo.wechat.enterprise.account'].search([('code', '=', account_code)])
+
+        if len(accounts) == 0:
+            raise exceptions.Warning('Account does not exist.Account code:%s',account_code)
         else:
-            account = sudo_user.env['odoo.wechat.enterprise.map'].get_map(code)
+            account = accounts[0]
+
         if group_ids:
             for g_id in group_ids.split(','):
                 group_users += [u.id for u in self.env.ref(g_id).users]

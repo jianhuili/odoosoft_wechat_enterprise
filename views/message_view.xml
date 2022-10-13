@@ -9,7 +9,7 @@
                      decoration-danger="status=='fail'"
                      import="false">
                     <field name="account"/>
-                    <!--<field name="users"/>-->
+                    <field name="dest_type"/>
                     <field name="type"/>
                     <field name="status"/>
                     <field name="title"/>
@@ -38,13 +38,16 @@
                                 <field name="type" widget="radio" readonly="0"/>
                             </group>
                             <group>
-                                <!-- <field name="res_model" readonly="1"/>
-                                <field name="res_id" readonly="1"/>
-                                <field name="res_name" readonly="1"/> -->
                                 <field name="create_user" readonly="1"/>
                             </group>
+                            <group>
+                                <field name="dest_type" widget="radio" readonly="0"/>
+                            </group>
                         </group>
-                        <group>
+                        <group attrs="{'invisible':[('dest_type','=', 'internal')]}">
+                            <field name="customers" widget="many2many_tags" readonly="0" />
+                        </group>
+                        <group attrs="{'invisible':[('dest_type','=', 'external')]}">
                             <field name="res_users" widget="many2many_tags" readonly="0" />
                             <field name="departments" widget="many2many_tags" readonly="0" />
                             <field name="users" widget="many2many_tags" readonly="0" />

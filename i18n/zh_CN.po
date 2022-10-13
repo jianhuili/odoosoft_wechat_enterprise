@@ -621,13 +621,6 @@ msgstr "agent: 应用ID"
 msgid "batch_job_result"
 msgstr "异步任务完成"
 
-#. module: odoo_wechat_enterprise
-#: code:addons/odoo_wechat_enterprise/models/app_module_map.py:0
-#: code:addons/odoo_wechat_enterprise/security/models/app_module_map.py:0
-#: model:ir.model.constraint,message:odoo_wechat_enterprise.constraint_odoo_wechat_enterprise_map_wechat_map_code_unique
-#, python-format
-msgid "code must be unique !"
-msgstr "标示码不能重复!"
 
 #. module: odoo_wechat_enterprise
 #: model_terms:ir.ui.view,arch_db:odoo_wechat_enterprise.view_wechat_enterprise_filter_form
@@ -876,11 +869,6 @@ msgstr "过滤器"
 #: model:ir.model,name:odoo_wechat_enterprise.model_odoo_wechat_enterprise_log
 msgid "odoo.wechat.enterprise.log"
 msgstr "日志"
-
-#. module: odoo_wechat_enterprise
-#: model:ir.model,name:odoo_wechat_enterprise.model_odoo_wechat_enterprise_map
-msgid "odoo.wechat.enterprise.map"
-msgstr "映射"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.model,name:odoo_wechat_enterprise.model_odoo_wechat_enterprise_message
