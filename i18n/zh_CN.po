@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-16 14:41+0000\n"
-"PO-Revision-Date: 2022-10-16 14:41+0000\n"
+"POT-Creation-Date: 2022-10-16 15:05+0000\n"
+"PO-Revision-Date: 2022-10-16 15:05+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -120,7 +120,7 @@ msgstr "企业代码"
 #. module: odoo_wechat_enterprise
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_account__name
 msgid "Company Name"
-msgstr ""
+msgstr "企业名称"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_message__content
@@ -295,11 +295,6 @@ msgid "Fail"
 msgstr "失败"
 
 #. module: odoo_wechat_enterprise
-#: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_customer__gender__1
-msgid "Male"
-msgstr "男性"
-
-#. module: odoo_wechat_enterprise
 #: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_customer__gender__2
 msgid "Female"
 msgstr "女性"
@@ -308,11 +303,6 @@ msgstr "女性"
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__follow_userid
 msgid "Follow UserID"
 msgstr "负责用户ID"
-
-#. module: odoo_wechat_enterprise
-#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__unassigned_flag
-msgid "Unassigned Flag"
-msgstr "未分配标志"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_user__status__2
@@ -458,6 +448,11 @@ msgstr "最近更新时间"
 #: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_filter__type__location
 msgid "Location"
 msgstr "地理位置"
+
+#. module: odoo_wechat_enterprise
+#: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_customer__gender__1
+msgid "Male"
+msgstr "男性"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_filter__match
