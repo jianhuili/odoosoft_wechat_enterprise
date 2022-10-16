@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 15:21+0000\n"
-"PO-Revision-Date: 2022-10-13 15:21+0000\n"
+"POT-Creation-Date: 2022-10-16 14:41+0000\n"
+"PO-Revision-Date: 2022-10-16 14:41+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -120,7 +120,7 @@ msgstr "企业代码"
 #. module: odoo_wechat_enterprise
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_account__name
 msgid "Company Name"
-msgstr "企业名称"
+msgstr ""
 
 #. module: odoo_wechat_enterprise
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_message__content
@@ -164,6 +164,7 @@ msgid "Create Users"
 msgstr "创建账户"
 
 #. module: odoo_wechat_enterprise
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_alert_message_wizard__create_uid
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_account__create_uid
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__create_uid
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_department__create_uid
@@ -179,6 +180,7 @@ msgid "Created by"
 msgstr "创建人"
 
 #. module: odoo_wechat_enterprise
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_alert_message_wizard__create_date
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_account__create_date
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__create_date
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_department__create_date
@@ -219,6 +221,7 @@ msgid "Dest Type"
 msgstr "目标用户类型"
 
 #. module: odoo_wechat_enterprise
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_alert_message_wizard__display_name
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_account__display_name
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__display_name
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_department__display_name
@@ -293,13 +296,23 @@ msgstr "失败"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_customer__gender__1
+msgid "Male"
+msgstr "男性"
+
+#. module: odoo_wechat_enterprise
+#: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_customer__gender__2
 msgid "Female"
 msgstr "女性"
 
 #. module: odoo_wechat_enterprise
-#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__follow_user
-msgid "Follow User"
-msgstr "负责用户"
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__follow_userid
+msgid "Follow UserID"
+msgstr "负责用户ID"
+
+#. module: odoo_wechat_enterprise
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__unassigned_flag
+msgid "Unassigned Flag"
+msgstr "未分配标志"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_user__status__2
@@ -312,6 +325,7 @@ msgid "Gender"
 msgstr "性别"
 
 #. module: odoo_wechat_enterprise
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_alert_message_wizard__id
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_account__id
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__id
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_department__id
@@ -392,6 +406,7 @@ msgid "LOCATION"
 msgstr "上报地理位置"
 
 #. module: odoo_wechat_enterprise
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_alert_message_wizard____last_update
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_account____last_update
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer____last_update
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_department____last_update
@@ -408,6 +423,7 @@ msgid "Last Modified on"
 msgstr "最近更新时间"
 
 #. module: odoo_wechat_enterprise
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_alert_message_wizard__write_uid
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_account__write_uid
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__write_uid
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_department__write_uid
@@ -423,6 +439,7 @@ msgid "Last Updated by"
 msgstr "最近更新人"
 
 #. module: odoo_wechat_enterprise
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_alert_message_wizard__write_date
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_account__write_date
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__write_date
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_department__write_date
@@ -448,6 +465,7 @@ msgid "Match"
 msgstr "匹配"
 
 #. module: odoo_wechat_enterprise
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_alert_message_wizard__message
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_log__message
 msgid "Message"
 msgstr "消息"
@@ -521,11 +539,6 @@ msgstr "排序"
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_department__parent_id
 msgid "Parent"
 msgstr "父部门"
-
-#. module: odoo_wechat_enterprise
-#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__position
-msgid "Position"
-msgstr "职位"
 
 #. module: odoo_wechat_enterprise
 #: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_user_batch_wizard__processed_users
@@ -715,6 +728,11 @@ msgid "agent: 应用ID"
 msgstr ""
 
 #. module: odoo_wechat_enterprise
+#: model:ir.model,name:odoo_wechat_enterprise.model_alert_message_wizard
+msgid "alert_message.wizard"
+msgstr ""
+
+#. module: odoo_wechat_enterprise
 #: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_filter__event_type__batch_job_result
 msgid "batch_job_result"
 msgstr "异步任务完成"
@@ -744,6 +762,7 @@ msgstr "成员进入应用"
 #: model_terms:ir.ui.view,arch_db:odoo_wechat_enterprise.view_wechat_enterprise_filter_form
 msgid "format: 语音格式，如amr，speex等"
 msgstr "format: 语音格式，如amr，speex等"
+
 
 #. module: odoo_wechat_enterprise
 #: model_terms:ir.ui.view,arch_db:odoo_wechat_enterprise.view_wechat_enterprise_filter_form
@@ -1014,6 +1033,7 @@ msgstr "弹出拍照或者相册发图"
 #: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_filter__event_type__pic_sysphoto
 msgid "pic_sysphoto"
 msgstr "弹出系统拍照发图"
+
 #. module: odoo_wechat_enterprise
 #: model_terms:ir.ui.view,arch_db:odoo_wechat_enterprise.view_wechat_enterprise_filter_form
 msgid “reply结构提示"
@@ -1172,12 +1192,16 @@ msgid "同步服务器客户"
 msgstr ""
 
 #. module: odoo_wechat_enterprise
+#: model_terms:ir.ui.view,arch_db:odoo_wechat_enterprise.view_wechat_enterprise_customer_form
+msgid "同步服务器数据"
+msgstr ""
+
+#. module: odoo_wechat_enterprise
 #: model:ir.ui.menu,name:odoo_wechat_enterprise.menuitem_wechat_server_sync_user
 msgid "同步服务器用户"
 msgstr ""
 
 #. module: odoo_wechat_enterprise
-#: model_terms:ir.ui.view,arch_db:odoo_wechat_enterprise.view_wechat_enterprise_customer_form
 #: model_terms:ir.ui.view,arch_db:odoo_wechat_enterprise.view_wechat_enterprise_user_form
 msgid "同步服务器用户数据"
 msgstr ""

@@ -73,7 +73,7 @@ class WechatCustomer(models.Model):
                 
                 # get local customers
                 local_values = {v['external_userid']: v for v in self.search_read([('account', '=', account.id)],
-                                                                        ['name', 'avatar', 'type', 'gender','corp_name', 'corp_full_name', 'follow_user'])}
+                                                                        ['external_userid','name', 'avatar', 'type', 'gender','corp_name', 'corp_full_name', 'follow_userid','unassigned_flag'])}
  
                 # fetch all customers
                 customer_id_infos = self.get_customer_id_list(client)
@@ -129,6 +129,7 @@ class WechatCustomer(models.Model):
                         # follow_userids = [v['userid'] for v in server_value.get('follow_user')] if server_value.get('follow_user') else [customer_id_info['follow_user_id']]
 
                         new_server_value = {
+                            'account' : account.id,
                             'external_userid': external_userid,
                             'name':  server_value.get('name'),
                             'avatar': server_value.get('avatar'),
