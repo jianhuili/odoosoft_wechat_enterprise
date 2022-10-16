@@ -305,6 +305,11 @@ msgid "Follow UserID"
 msgstr "负责用户ID"
 
 #. module: odoo_wechat_enterprise
+#: model:ir.model.fields,field_description:odoo_wechat_enterprise.field_odoo_wechat_enterprise_customer__follow_user
+msgid "Follow User"
+msgstr "负责用户"
+
+#. module: odoo_wechat_enterprise
 #: model:ir.model.fields.selection,name:odoo_wechat_enterprise.selection__odoo_wechat_enterprise_user__status__2
 msgid "Forbidden"
 msgstr "禁止"

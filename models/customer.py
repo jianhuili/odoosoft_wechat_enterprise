@@ -29,10 +29,9 @@ class WechatCustomer(models.Model):
     unassigned_flag = fields.Boolean('Unassigned Flag', default=False)
 
     createtime = fields.Datetime('Createtime', readonly=True)
-    follow_userid = fields.Char('Follow UserID')
 
-    # follow_user = fields.Many2many('odoo.wechat.enterprise.user', 'wechat_enterprise_user_customer_rel', 'external_userid', 'wechat_userid',
-    #                                'Follow User')
+    follow_userid = fields.Char('Follow UserID', readonly=True)
+    follow_user = fields.Many2one('odoo.wechat.enterprise.user', 'Follow User', readonly=True)
     account = fields.Many2one('odoo.wechat.enterprise.account', 'Account', readonly=True)
 
     delete_flag = fields.Boolean('Delete Flag', default=False)
@@ -73,7 +72,7 @@ class WechatCustomer(models.Model):
                 
                 # get local customers
                 local_values = {v['external_userid']: v for v in self.search_read([('account', '=', account.id)],
-                                                                        ['external_userid','name', 'avatar', 'type', 'gender','corp_name', 'corp_full_name', 'follow_userid','unassigned_flag'])}
+                                                                        ['external_userid','name', 'avatar', 'type', 'gender','corp_name', 'corp_full_name', 'follow_userid','follow_user', 'unassigned_flag'])}
  
                 # fetch all customers
                 customer_id_infos = self.get_customer_id_list(client)
@@ -97,7 +96,6 @@ class WechatCustomer(models.Model):
                             'corp_name': server_value.get('corp_name'),
                             'corp_full_name': server_value.get('corp_full_name'),
                             'unassigned_flag': server_value.get('unassigned_flag'),
-                            # 'follow_user': [v['userid'] for v in server_value.get('follow_user')] if server_value.get('follow_user') else [customer_id_info['follow_user_id']]
                             'follow_userid' : follow_userid
                         }
                         local_value = local_values[external_userid]
@@ -109,13 +107,13 @@ class WechatCustomer(models.Model):
                             'corp_name': local_value['corp_name'],
                             'corp_full_name': local_value['corp_full_name'],
                             'unassigned_flag': local_value['unassigned_flag'],
-                            # 'follow_user': [v['user_code'] for v in local_value['follow_user']],
                             'follow_userid' : local_value['follow_userid']
                         }
                         # if have difference
                         if set(temp_server_value.items()) - set(temp_local_value.items()):
                             # replace follow user
-                            # temp_server_value['follow_user'] = self.get_wechat_users(account.id,temp_server_value['follow_user'] )
+                            follow_user = self.get_wechat_user(account.id, temp_server_value['follow_userid'])
+                            temp_server_value['follow_user'] = follow_user['id'] if follow_user else None
                             self.env['odoo.wechat.enterprise.customer'].browse(local_value['id']).write(temp_server_value)
                         
                         # un registry local value
@@ -127,7 +125,7 @@ class WechatCustomer(models.Model):
                         self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户', u'添加本地不存在用户:%s' % external_userid)
 
                         # follow_userids = [v['userid'] for v in server_value.get('follow_user')] if server_value.get('follow_user') else [customer_id_info['follow_user_id']]
-
+                        follow_user = self.get_wechat_user(account.id, follow_userid)
                         new_server_value = {
                             'account' : account.id,
                             'external_userid': external_userid,
@@ -138,7 +136,7 @@ class WechatCustomer(models.Model):
                             'corp_name': server_value.get('corp_name'),
                             'corp_full_name': server_value.get('corp_full_name'),
                             'unassigned_flag': server_value.get('unassigned_flag'),
-                            # 'follow_user' : self.get_wechat_users(account.id, follow_userids)
+                            'follow_user' :  follow_user['id'] if follow_user else None,
                             'follow_userid': follow_userid
                         }
 
@@ -160,14 +158,14 @@ class WechatCustomer(models.Model):
                 self.env['alert_message.wizard'].show_alert_message("服务器客户数据同步失败.{}", str(e))
 
 
-    def get_wechat_users(self, account_id, wechat_user_ids):
+    def get_wechat_user(self, account_id, wechat_user_ids):
         """
         获取Follow企业微信用户
         """
-        users = self.env['odoo.wechat.enterprise.user'].search_read([('account', '=', account_id),('user_code', 'in', wechat_user_ids)])
+        users = self.env['odoo.wechat.enterprise.user'].search_read([('account', '=', account_id),('user_code', '=', wechat_user_ids)])
 
-        _logger.debug('get_wechat_users results: %s', users)
-        return users
+        _logger.debug('get_wechat_user results: %s', users)
+        return users[0] if len(users) >=0 else None
 
     @staticmethod
     def get_unassigned_customer_list(wechat_client):
