@@ -5,16 +5,15 @@
             <field name="name">view.odoo.wechat.enterprise.customer.tree</field>
             <field name="model">odoo.wechat.enterprise.customer</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree create="false">
                     <field name="account"/>
                     <field name="external_userid"/>   
                     <field name="name"/>
                     <field name="gender"/>
-                    <field name="position"/>
                     <field name="corp_name"/>
                     <field name="corp_full_name"/>
                     <field name="mobile"/>
-                    <field name="follow_user"/>
+                    <field name="follow_userid"/>
                     <field name="unassigned_flag"/>
                     <field name="remark"/>
                 </tree>
@@ -25,26 +24,24 @@
             <field name="name">view.odoo.wechat.enterprise.customer.form</field>
             <field name="model">odoo.wechat.enterprise.customer</field>
             <field name="arch" type="xml">
-                <form>
+                <form create="false">
                     <header>
-                        <button name="sync_wechat_server" string="同步服务器用户数据" type="object" />
+                        <button name="sync_wechat_server" string="同步服务器数据" type="object" />
                     </header>
                     <sheet>
                         <group>
                             <group>
-                                <field name="account"  />
-                                <field name="follow_user"/>
+                                <field name="account"/>
+                                <field name="follow_userid"/>
                             </group>
                             <newline/>
                             <group>
                                 <field name="external_userid"/>
                                 <field name="name"/>
                                 <field name="gender" />
-                                <field name="position" />
                                 <field name="corp_name"  />
                                 <field name="corp_full_name"  />
                                 <field name="mobile"/>
-                                <field name="follow_user"/>
                                 <field name="remark"/>
                             </group>
                         </group>

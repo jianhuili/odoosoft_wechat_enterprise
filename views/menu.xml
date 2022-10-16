@@ -98,22 +98,29 @@
             <field name="url">http://qy.weixin.qq.com</field>
         </record>
 
-
-        <record id="action_sync_wechat_server_manual" model="ir.actions.server">
-            <field name="name">Sync Wechat Server Manual</field>
-            <!-- <field name="condition">True</field> -->
+        <record id="action_sync_wechat_server_user" model="ir.actions.server">
+            <field name="name">Sync Wechat Server User</field>
             <field name="model_id" ref="model_odoo_wechat_enterprise_user"/>
             <field name="code">env["odoo.wechat.enterprise.user"].sync_wechat_server()</field>
             <field name="state">code</field>
             <field name="type">ir.actions.server</field>
         </record>
 
+        <record id="action_sync_wechat_server_customer" model="ir.actions.server">
+            <field name="name">Sync Wechat Server Customer</field>
+            <field name="model_id" ref="model_odoo_wechat_enterprise_customer"/>
+            <field name="code">env["odoo.wechat.enterprise.customer"].sync_wechat_server()</field>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+        </record>
+
+
   <menuitem id="menuitem_wechat_enterprise_root" name="微信企业号" sequence="450"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
 
         <menuitem id="menuitem_wechat_en_message" name="消息" parent="menuitem_wechat_enterprise_root" sequence="50"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
-        <menuitem id="menuitem_wechat_en_message_manage" name="所有消息" parent="menuitem_wechat_en_message" sequence="20"
+        <menuitem id="menuitem_wechat_en_message_manage" name="消息一览" parent="menuitem_wechat_en_message" sequence="20"
                   action="action_wechat_enterprise_message"/>
 
         <!--
@@ -133,10 +140,13 @@
 -->
         <menuitem id="menuitem_wechat_en_customer" name="客户" parent="menuitem_wechat_enterprise_root" sequence="80"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
-        <menuitem id="menuitem_wechat_en_customer_manage" name="所有客户" parent="menuitem_wechat_en_customer" sequence="20"
+        <menuitem id="menuitem_wechat_en_customer_manage" name="客户一览" parent="menuitem_wechat_en_customer" sequence="20"
                   action="action_wechat_enterprise_customer"/>
-        <menuitem id="menuitem_wechat_unassigned_customer_manage" name="未分配客户" parent="menuitem_wechat_en_customer" sequence="30"
-                  action="action_wechat_enterprise_customer_unassigned"/>
+        <!-- <menuitem id="menuitem_wechat_unassigned_customer_manage" name="未分配客户一览" parent="menuitem_wechat_en_customer" sequence="30"
+                  action="action_wechat_enterprise_customer_unassigned"/> -->
+        <menuitem id="menuitem_wechat_server_sync_customer" name="同步服务器客户" parent="menuitem_wechat_en_customer" sequence="60"
+                  action="action_sync_wechat_server_customer"
+                  groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
 
         <menuitem id="menuitem_wechat_en_user" name="通讯录" parent="menuitem_wechat_enterprise_root" sequence="90"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
@@ -152,8 +162,8 @@
             <menuitem id="menuitem_wechat_force_create_user" name="强制创建用户" parent="menuitem_wechat_en_user" sequence="40"
                   action="action_wechat_force_create_user"/>
          -->
-          <menuitem id="menuitem_wechat_server_sync" name="手动同步服务器" parent="menuitem_wechat_en_user" sequence="60"
-                  action="action_sync_wechat_server_manual"
+        <menuitem id="menuitem_wechat_server_sync_user" name="同步服务器用户" parent="menuitem_wechat_en_user" sequence="60"
+                  action="action_sync_wechat_server_user"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
 
         <!--

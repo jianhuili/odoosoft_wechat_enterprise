@@ -57,7 +57,7 @@ class WechatUser(models.Model):
     @api.model
     def unlink_wechat_account(self, userids, account):
         if self.env['ir.config_parameter'].get_param('wechat.sync') == 'True':
-            client = WeChatClient(account.corpid, account.secret)
+            client = WeChatClient(account.corpid, account.address_secret)
             client.user.batch_delete(user_ids=userids)
 
     def write_wechat_account(self):
@@ -174,6 +174,7 @@ class WechatUser(models.Model):
         """
         sync wechat server user info to local database
         """
+        _logger.info(u'Sync wechat server user data-%s', u'Start')
         accounts = self.env['odoo.wechat.enterprise.account'].search([])
         for account in accounts:
             try:
@@ -231,13 +232,17 @@ class WechatUser(models.Model):
                 if local_values:
                     mismatch_ids = [v['id'] for v in local_values.values()]
                     self.with_context(is_no_wechat_sync=True).browse(mismatch_ids).write({'status': '10'})
+                
+                self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户-%s', u'同步完成')
+                _logger.info(u'Sync wechat server user data-%s', u'End')
+                
+                self.env['alert_message.wizard'].show_alert_message(u"服务器用户数据同步成功")
 
             except WeChatClientException as e:
-                _logger.error('Get error in sync from server', e)
-                self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户', str(e))
-        self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户', u'同步完成')
-
-
+                _logger.error(u'Get error in sync from server.%s', e)
+                self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户失败.%s', str(e))
+                self.env['alert_message.wizard'].show_alert_message(u"服务器用户数据同步失败.{}", str(e))
+       
 class WechatWizard(models.TransientModel):
     _name = 'odoo.wechat.enterprise.user.wizard'
 

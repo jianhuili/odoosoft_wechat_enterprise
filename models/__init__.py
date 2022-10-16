@@ -1,4 +1,5 @@
 
+from . import alert_message
 from . import wechat_abstract
 from . import account
 from . import user
