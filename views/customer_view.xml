@@ -15,7 +15,7 @@
                     <field name="mobile"/>
                     <field name="follow_user"/>
                     <field name="unassigned_flag"/>
-                    <field name="remark"/>
+                    <button string="Transfer" type="action" name="action_wechat_enterprise_customer_transfer"/>
                 </tree>
             </field>
         </record>
@@ -26,7 +26,7 @@
             <field name="arch" type="xml">
                 <form create="false">
                     <header>
-                        <button name="sync_wechat_server" string="同步服务器数据" type="object" />
+                        <button name="transfer" string="Transfer Customer" type="object" />
                     </header>
                     <sheet>
                         <group>
@@ -46,6 +46,36 @@
                             </group>
                         </group>
                     </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wechat_enterprise_customer_transfer" model="ir.actions.act_window">
+            <field name="name">Transfer Customer</field>
+            <field name="res_model">odoo.wechat.enterprise.message</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="odoo_wechat_enterprise_customer_transfer_wizard_form" model="ir.ui.view">
+            <field name="name">view_odoo_wechat_enterprise_customer_transfer_wizard_form</field>
+            <field name="model">odoo.wechat.enterprise.customer.transfer.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="account"/>
+                            <field name="customer"/>
+                            <field name="current_follow_user"/>
+                            <field name="new_follow_user"/>
+                        </group>
+                        <separator string="Result"/>
+                        <field name="result" readonly="1"/>
+                    </sheet>
+                    <footer>
+                        <button name="button_transfer" type="object" string="Transfer" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
                 </form>
             </field>
         </record>

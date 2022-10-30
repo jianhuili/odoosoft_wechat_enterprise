@@ -17,7 +17,7 @@ class WechatAccount(models.Model):
     ase_key = fields.Char('EncodingAESKey', required=True)
     remark = fields.Char('Remark')
     # filters = fields.One2many('odoo.wechat.enterprise.filter', 'account', 'Filters')
-    callback_url = fields.Char(string='Callback url', compute='_compute_url')
+    callback_url = fields.Char(string='Callback URL', compute='_compute_url')
     _sql_constraints = [('wechat_account_code_unique', 'unique(code)', _('Code must be unique !'))]
 
     @api.model

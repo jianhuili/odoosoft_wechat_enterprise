@@ -14,18 +14,16 @@ _logger = logging.getLogger(__name__)
 class Message(models.Model):
     _name = 'odoo.wechat.enterprise.message'
     _order = 'id desc'
-    _rec_name = 'status'
+    _rec_name = 'state'
 
-    status = fields.Selection([('draft', 'Draft'), ('send', 'Send'), ('fail', 'Fail')], 'Status', default='draft')
+    state = fields.Selection([('draft', 'Draft'), ('send', 'Send'), ('fail', 'Fail')], 'State', default='draft')
     type = fields.Selection([('text', 'Text'), ('news', 'News'), ('image', 'Image')], 'Message Type', default='text', required=True)
 
-    dest_type = fields.Selection([('external', 'External'), ('internal', 'Internal')], default='external',required=True)
+    # dest_type = fields.Selection([('external', 'External'), ('internal', 'Internal')], default='external',required=True)
     account = fields.Many2one('odoo.wechat.enterprise.account', 'Account', required=True)
-    users = fields.Many2many('odoo.wechat.enterprise.user', 'rel_wechat_ep_message_user', 'message_id', 'user_code', 'Users')
+    users = fields.Many2many('odoo.wechat.enterprise.user', 'rel_wechat_ep_message_user', 'message_id', 'wechatuser_id', 'Users')
     departments = fields.Many2many('odoo.wechat.enterprise.department', 'rel_wechat_ep_message_department', 'message_id', 'department_id',
                                    'Departments')
-    customers = fields.Many2many('odoo.wechat.enterprise.customer', 'rel_wechat_ep_message_customer', 'message_id', 'external_user_id', 'Customers')
-
     res_users = fields.Many2many('res.users', 'rel_wechat_ep_res_user', 'message_id', 'user_id', 'Res Users')
     create_user = fields.Many2one('res.users', 'Create User')
 
@@ -46,7 +44,7 @@ class Message(models.Model):
 
     @api.model
     def process_message(self):
-        self.search([('status', '=', 'draft')]).sent_message()
+        self.search([('state', '=', 'draft')]).sent_message()
 
    
     def sent_message(self):
@@ -79,13 +77,13 @@ class Message(models.Model):
                                                       media_id=result['media_id'],
                                                       party_ids='|'.join([str(d.id) for d in message.departments]),
                                                       )
-                    message.status = 'send'
+                    message.state = 'send'
                     message.result = u'成功'
                     message.send_time = fields.Datetime.now()
                 except Exception as e:
-                    message.write({'status': 'fail', 'result': str(e), 'send_time': fields.Datetime.now()})
+                    message.write({'state': 'fail', 'result': str(e), 'send_time': fields.Datetime.now()})
             else:
-                message.write({'status': 'fail', 'result': u'没有可发送对象', 'send_time': fields.Datetime.now()})
+                message.write({'state': 'fail', 'result': u'没有可发送对象', 'send_time': fields.Datetime.now()})
 
    
     def get_url(self):
@@ -93,7 +91,7 @@ class Message(models.Model):
             return ''
         oath_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%(CORPID)s' + \
                    '&redirect_uri=%(REDIRECT_URI)s&response_type=code&scope=snsapi_base&state=%(STATE)s#wechat_redirect'
-        have_mobile = self.sudo().env['ir.module.module'].search([('status', '=', 'installed'), ('name', '=', 'odoo_mobile')])
+        have_mobile = self.sudo().env['ir.module.module'].search([('state', '=', 'installed'), ('name', '=', 'odoo_mobile')])
         if self.template.url:
             index = self.sudo().env['ir.config_parameter'].get_param('wechat.base.url') + self.template.url.format(**{
                 'res_id': self.res_id,

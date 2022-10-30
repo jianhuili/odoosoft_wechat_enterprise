@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data noupdate="1">
-        <record id="view_wechat_enterprise_message_tree" model="ir.ui.view">
-            <field name="name">view.odoo.wechat.enterprise.message.tree</field>
-            <field name="model">odoo.wechat.enterprise.message</field>
+        <record id="view_wechat_enterprise_customer_message_tree" model="ir.ui.view">
+            <field name="name">view.odoo.wechat.enterprise.customer_message.tree</field>
+            <field name="model">odoo.wechat.enterprise.customer_message</field>
             <field name="arch" type="xml">
                 <tree decoration-info="state=='draft'"
                      decoration-danger="state=='fail'"
-                     import="false">
+                     import="false"
+                     >
                     <field name="account"/>
                     <field name="type"/>
                     <field name="state"/>
@@ -18,9 +19,9 @@
                 </tree>
             </field>
         </record>
-        <record id="view_wechat_enterprise_message_form" model="ir.ui.view">
-            <field name="name">view.odoo.wechat.enterprise.message.form</field>
-            <field name="model">odoo.wechat.enterprise.message</field>
+        <record id="view_wechat_enterprise_customer_message_form" model="ir.ui.view">
+            <field name="name">view.odoo.wechat.enterprise.customer_message.form</field>
+            <field name="model">odoo.wechat.enterprise.customer_message</field>
             <field name="arch" type="xml">
                 <form>
                     <header>
@@ -40,20 +41,28 @@
                                 <field name="create_user" readonly="1"/>
                             </group>
                         </group>
-                        <group>
-                            <!-- <field name="res_users" widget="many2many_tags" readonly="0" /> -->
-                            <field name="departments" widget="many2many_tags" readonly="0"  options="{'no_create_edit': True}"/>
-                            <field name="users" widget="many2many_tags" readonly="0"  options="{'no_create_edit': True}"/>
+                        <group >
+                            <field name="customers" widget="many2many_tags" readonly="0"  options="{'no_create_edit': True}" />
                         </group>
-                        <group attrs="{'invisible':[('type','not in', ['news', 'text'])]}" col="1">
-                            <separator string="消息内容"/>
+                        <separator string="消息内容"/>
+                        <group col="1">
                             <!-- <field name="template" readonly="0" /> -->
                             <field name="title" nolabel="1" placeholder="标题" readonly="0" />
-                            <field name="content" nolabel="1" placeholder="正文" readonly="0" />
                         </group>
-                        <group attrs="{'invisible':[('type','not in', ['image'])]}" col="1">
-                            <separator string="文件"/>
-                            <field name="file" widget="many2many_binary" nolabel="1" readonly="0" />
+                        <group col="1" attrs="{'invisible':[('type','not in', ['link'])]}">
+                            <field name="pic_url" nolabel="1" placeholder="封面链接地址" />
+                            <field name="url" nolabel="1" placeholder="内容链接地址"/>
+                        </group>
+                        <group col="1" attrs="{'invisible':[('type','not in', ['text','link'])]}">
+                            <field name="content" nolabel="1" placeholder="内容" />
+                        </group>
+                         <group col="1" attrs="{'invisible':[('type','not in', ['miniprogram'])]}">
+                            <field name="program_id" nolabel="1" placeholder="小程序ID"/>
+                            <field name="program_page" nolabel="1" placeholder="小程序启动页"/>
+                        </group>
+                        <group attrs="{'invisible':[('type','not in', ['image','miniprogram'])]}" col="1">
+                            <separator string="图片"/>
+                            <field name="file" widget="many2many_binary" nolabel="1"/>
                         </group>
                         <separator string="发送结果"/>
                         <field name="result" readonly="1"/>

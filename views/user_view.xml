@@ -13,7 +13,7 @@
                     <field name="wechat_id"/>
                     <field name="mobile"/>
                     <field name="email"/>
-                    <field name="status"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
@@ -24,12 +24,12 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="button_invite" string="邀请关注" type="object" status="4"/>
+                        <button name="button_invite" string="邀请关注" type="object" states="4"/>
                         <button name="unlink_force" string="本地强制删除" type="object" />
                         <button name="create_force" string="远程强制创建" type="object" />
                         <button name="write_force" string="远程强制更新" type="object" />
                         <button name="sync_wechat_server" string="同步服务器用户数据" type="object" />
-                        <field name="status" widget="statusbar" readonly="1" statusbar_visible="1,4"/>
+                        <field name="state" widget="statusbar" readonly="1" statusbar_visible="1,4"/>
                     </header>
                     <sheet>
                         <group invisible="1">

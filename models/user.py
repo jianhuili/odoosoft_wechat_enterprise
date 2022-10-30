@@ -13,9 +13,9 @@ _logger = logging.getLogger(__name__)
 
 class WechatUser(models.Model):
     _name = 'odoo.wechat.enterprise.user'
-    _rec_name = 'user_code'
+    _rec_name = 'name'
 
-    status = fields.Selection([('1', 'Activate'), ('2', 'Forbidden'), ('4', 'Inactivate'), ('5', 'Exit'),('10', 'No Match')], 'Status', default='4')
+    state = fields.Selection([('1', 'Activate'), ('2', 'Forbidden'), ('4', 'Inactivate'), ('5', 'Exit'),('10', 'No Match')], 'State', default='4')
 
     user_code = fields.Char('User ID', required=True)
     name = fields.Char('Name', required=True)
@@ -166,7 +166,7 @@ class WechatUser(models.Model):
                 record.account.get_client().batch.invite(user=[record.user_code])
             except WeChatClientException as e:
                 if e.errcode == 60119:  # message: contact already joined
-                    record.status = '1'
+                    record.state = '1'
                 else:
                     raise e
 
@@ -181,26 +181,26 @@ class WechatUser(models.Model):
                 client = account.get_client()
                 server_values = client.user.list(department_id=1, fetch_child=True)
                 local_values = {v['user_code']: v for v in self.search_read([('account', '=', account.id)],
-                                                                        ['status', 'user_code', 'name', 'mobile', 'email', 'wechat_id', 'job', ])}
+                                                                        ['state', 'user_code', 'name', 'mobile', 'email', 'wechat_id', 'job', ])}
                 for server_value in server_values:
                     # if someone on server and in local
                     if server_value['userid'] in local_values:
                         user_code = server_value['userid']
                         temp_server_value = {
-                            'wechat_id': server_value.get('wechat_id', False),
+                            'wechat_id': server_value.get('userid'),
                             'name': server_value['name'],
-                            'mobile': server_value.get('mobile', False),
-                            'job': server_value.get('position', False),
-                            'email': server_value.get('email', False),
-                            'status': str(server_value['status']),
+                            'mobile': server_value.get('mobile'),
+                            'job': server_value.get('position'),
+                            'email': server_value.get('email'),
+                            'state': str(server_value['status']),
                         }
                         temp_local_value = {
                             'wechat_id': local_values[user_code]['wechat_id'],
                             'name': local_values[user_code]['name'],
-                            'mobile': local_values[user_code].get('mobile', False) or False,
-                            'job': local_values[user_code].get('job', False) or False,
-                            'email': local_values[user_code].get('email', False) or False,
-                            'status': local_values[user_code]['status'],
+                            'mobile': local_values[user_code].get('mobile'),
+                            'job': local_values[user_code].get('job'),
+                            'email': local_values[user_code].get('email'),
+                            'state': local_values[user_code]['state'],
                         }
                         # if have difference
                         if set(temp_server_value.items()) - set(temp_local_value.items()):
@@ -223,7 +223,7 @@ class WechatUser(models.Model):
                             'mobile': server_value.get('mobile', False),
                             'job': server_value.get('position', False),
                             'email': server_value.get('email', False),
-                            'status': str(server_value['status']),
+                            'state': str(server_value['status']),
                         }
 
                         self.env['odoo.wechat.enterprise.user'].with_context(is_no_wechat_sync=True).create(new_user_value)
@@ -231,7 +231,7 @@ class WechatUser(models.Model):
                 # if someone on local but not on server
                 if local_values:
                     mismatch_ids = [v['id'] for v in local_values.values()]
-                    self.with_context(is_no_wechat_sync=True).browse(mismatch_ids).write({'status': '10'})
+                    self.with_context(is_no_wechat_sync=True).browse(mismatch_ids).write({'state': '10'})
                 
                 self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户-%s', u'同步完成')
                 _logger.info(u'Sync wechat server user data-%s', u'End')
@@ -396,7 +396,7 @@ class WechatInviteWizard(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         result = super(WechatInviteWizard, self).default_get(fields_list)
-        users = self.env['odoo.wechat.enterprise.user'].search([('id', '=', self.env.context['active_ids']), ('status', '=', '4')])
+        users = self.env['odoo.wechat.enterprise.user'].search([('id', '=', self.env.context['active_ids']), ('state', '=', '4')])
         result['user_ids'] = [(6, 0, [u.id for u in users])]
         account_id = list(set([u.account.id for u in users]))
         if len(account_id) == 1:

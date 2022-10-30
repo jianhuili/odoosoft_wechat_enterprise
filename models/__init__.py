@@ -10,4 +10,6 @@ from . import filter
 from . import log
 from . import template
 from . import customer
+from . import customer_message
+from . import welcome_message_template
 # import wechat_settings

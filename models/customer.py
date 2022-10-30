@@ -13,11 +13,11 @@ _logger = logging.getLogger(__name__)
 
 class WechatCustomer(models.Model):
     _name = 'odoo.wechat.enterprise.customer'
-    _rec_name = 'external_userid'
+    _rec_name = 'name'
 
     external_userid = fields.Char('External User ID', readonly=True)
     name = fields.Char('Name', readonly=True)
-    avatar = fields.Char('Name', readonly=True)
+    avatar = fields.Char('Avatar', readonly=True)
     type = fields.Selection([('1', 'Wechat User'), ('2', 'Enterprise Wechat User')],'User Type', default='1', readonly=True)
     gender = fields.Selection([('0', 'Unknown'), ('1', 'Male'), ('2', 'Female')],'Gender', default='0', readonly=True)
     unionid = fields.Char('Union ID', readonly=True)
@@ -50,15 +50,6 @@ class WechatCustomer(models.Model):
         self.env.cr.execute('RELEASE SAVEPOINT wechat_customer_create')
         return customer
 
-
-    def transfer(self, handover_userid, takeover_userid):
-        """
-        客户再分配
-
-        :param handover_userid: 离职成员的userid
-        :param takeover_userid: 接替成员的userid
-        """
-
     def sync_wechat_server(self):
         """
         sync wechat server user info to local database
@@ -68,20 +59,20 @@ class WechatCustomer(models.Model):
         accounts = self.env['odoo.wechat.enterprise.account'].search([])
         for account in accounts:
             try:
-                client = account.get_client()
+                wechat_client =  WeChatClient(account.corpid, account.app_secret)
                 
                 # get local customers
                 local_values = {v['external_userid']: v for v in self.search_read([('account', '=', account.id)],
                                                                         ['external_userid','name', 'avatar', 'type', 'gender','corp_name', 'corp_full_name', 'follow_userid','follow_user', 'unassigned_flag'])}
  
                 # fetch all customers
-                customer_id_infos = self.get_customer_id_list(client)
+                customer_id_infos = self.get_customer_id_list(wechat_client)
    
                 for customer_id_info in customer_id_infos:
                     external_userid = customer_id_info['external_userid']
                     follow_userid = customer_id_info['follow_userid']
 
-                    server_value = client.external_contact.get(external_userid)['external_contact']
+                    server_value = wechat_client.external_contact.get(external_userid)['external_contact']
                     server_value['unassigned_flag'] = False
 
                     ## 检查并更新本地客户信息
@@ -157,12 +148,38 @@ class WechatCustomer(models.Model):
                 self.env['odoo.wechat.enterprise.log'].log_info(u'同步服务器用户失败-%s', str(e))
                 self.env['alert_message.wizard'].show_alert_message("服务器客户数据同步失败.{}", str(e))
 
+    def get_account(self, account_id):
+        """
+        获取客户Model
+        """
+        accounts = self.env['odoo.wechat.enterprise.account'].browse(account_id).read()
 
-    def get_wechat_user(self, account_id, wechat_user_ids):
+        _logger.debug('get_account results: %s', accounts)
+        return accounts[0] if len(accounts) >=0 else None
+
+    def get_customer(self, customer_id):
+        """
+        获取客户Model
+        """
+        customers = self.env['odoo.wechat.enterprise.customer'].browse(customer_id)
+
+        _logger.debug('get_customer results: %s', customers)
+        return customers[0] if len(customers) >=0 else None
+
+    def get_wechat_user(self, account_id, wechat_user_id):
         """
         获取Follow企业微信用户
         """
-        users = self.env['odoo.wechat.enterprise.user'].search_read([('account', '=', account_id),('user_code', '=', wechat_user_ids)])
+        users = self.env['odoo.wechat.enterprise.user'].search([('account', '=', account_id),('wechat_id', '=', wechat_user_id)])
+
+        _logger.debug('get_wechat_user results: %s', users)
+        return users[0] if len(users) >=0 else None
+
+    def get_wechat_user_by_id(self, user_id):
+        """
+        获取Follow企业微信用户
+        """
+        users = self.env['odoo.wechat.enterprise.user'].browse(user_id)
 
         _logger.debug('get_wechat_user results: %s', users)
         return users[0] if len(users) >=0 else None
@@ -208,4 +225,92 @@ class WechatCustomer(models.Model):
         
         return all_customer_ids
 
-   
+class CustomerTransferWizard(models.TransientModel):
+    _name = 'odoo.wechat.enterprise.customer.transfer.wizard'
+    _rec_name = 'account'
+    _description = 'Customer Transfer Wizard'
+
+    account = fields.Many2one('odoo.wechat.enterprise.account', 'Account', readonly=True)
+    customer = fields.Many2one('odoo.wechat.enterprise.customer', 'Customer', readonly=True)
+    current_follow_user = fields.Many2one('odoo.wechat.enterprise.user', 'Current Follow User', readonly=True)
+    new_follow_user = fields.Many2one('odoo.wechat.enterprise.user', 'New Follow User')
+    result = fields.Char('Result')
+
+    @api.model
+    def default_get(self, fields_list):
+        _logger.debug('Enter default_get, active_ids=%s'.format( self.env.context['active_ids']))
+        customers = self.env['odoo.wechat.enterprise.customer'].search([('id', '=', self.env.context['active_ids'])])
+        customer = customers[0]
+
+        defaults = {
+            'account' : customer.account,
+            'customer' : customer,
+            'current_follow_user' : customer.follow_user,
+        }
+        return defaults
+
+    def button_transfer(self):
+        """
+        客户再分配
+        """
+        _logger.debug('Enter button_transfer')
+        for record in self:
+            customer = record.customer
+            current_follow_user = record.current_follow_user
+            new_follow_user = record.new_follow_user
+            
+            self.transfer_customer(record, customer, current_follow_user, new_follow_user)
+                    
+        return {
+            'type': 'ir.actions.act_window.message',
+            'title': _('Customer Transfer'),
+            'message': _('Customer transferred successfully'),
+        }
+
+    def transfer_customer(self, record, customer, current_follow_user, new_follow_user):
+        """
+        客户再分配
+
+        :param current_follow_user: 当前成员
+        :param new_follow_user: 接替成员
+        """
+        _logger.debug('Enter button_transfer')
+        # 1. get customer external id
+        # customer = self.get_customer(customer_id)
+        # if (customer == None):
+        #     _logger.warning(u'Could not find customer data. Customer Id: %s', customer_id)
+        #     raise exceptions.Warning('Could not find customer data. Customer Id: %s', customer_id)
+        customer_user_id = customer.external_userid
+        account = customer.account
+
+        # # 1. check and get current follow user info
+        # from_follow_user = self.get_wechat_user_by_id(from_follow_user_id)
+        # if (from_follow_user == None):
+        #     _logger.warning(u'Could not find current follow user data. Wechat User Id: %s', from_follow_user_id)
+        #     raise exceptions.Warning('Could not find current follow user data. Wechat User Id: %s', from_follow_user_id)
+        handover_userid = current_follow_user.wechat_id
+
+        # # 2. check and get new follow user info
+
+        # to_follow_user = self.get_wechat_user_by_id(to_follow_user_id)
+        # if (to_follow_user == None):
+        #     _logger.warning(u'Could not find new follow user data. Wechat User Id: %s', to_follow_user_id)
+        #     raise exceptions.Warning('Could not find new follow user data. Wechat User Id: %s', to_follow_user_id)
+        takeover_userid = new_follow_user.wechat_id
+
+        # 3. do transfer
+        wechat_client = WeChatClient(account.corpid, account.app_secret)
+        _logger.debug(u'Transferring Customer.Customer external user id: %s, Current follow user id :%s, new follow user id: %s', customer_user_id, handover_userid, takeover_userid)
+        process_result = wechat_client.external_contact.transfer(customer_user_id, handover_userid,takeover_userid)
+
+        if (process_result['errcode'] == 0):
+            ## update record
+            customer_model = self.env['odoo.wechat.enterprise.customer'].browse(customer.id)
+            customer_model.write({'follow_user': new_follow_user,'follow_userid': new_follow_user.wechat_id})
+            _logger.info(u'Customer transferred succeed.Customer external user id: %s, Current follow user id :%s, new follow user id: %s', customer_user_id, handover_userid, takeover_userid)
+        else:
+            record.result = process_result['errmessage']
+            _logger.warning(u'Customer transferred failed.Customer external user id: %s, Current follow user id :%s, new follow user id: %s', customer_user_id, handover_userid, takeover_userid)
+            raise exceptions.Warning(_('Failed to transfer customer: %s'), customer_user_id)
+
+

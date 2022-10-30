@@ -6,10 +6,10 @@
 6,access_odoo_wechat_enterprise_filter,model_odoo_wechat_enterprise_filter,,1,0,0,0
 7,access_odoo_wechat_enterprise_message_template,model_odoo_wechat_enterprise_message_template,,1,0,0,0
 8,access_odoo_wechat_enterprise_customer,model_odoo_wechat_enterprise_customer,,1,0,0,0
+9,access_odoo_wechat_enterprise_message,model_odoo_wechat_enterprise_customer_message,,1,0,0,0
 
 
 101,access_odoo_wechat_enterprise_account_admin,model_odoo_wechat_enterprise_account,odoo_wechat_enterprise.group_wechat_enterprise_admin,1,1,1,1
-
 102,access_odoo_wechat_enterprise_message_manager,model_odoo_wechat_enterprise_message,,1,1,1,1
 103,access_odoo_wechat_enterprise_user_manager,model_odoo_wechat_enterprise_user,,1,1,1,1
 104,access_odoo_wechat_enterprise_department_manager,model_odoo_wechat_enterprise_department,,1,1,1,1
@@ -17,3 +17,4 @@
 106,access_odoo_wechat_enterprise_log,model_odoo_wechat_enterprise_log,,1,0,0,0
 107,access_odoo_wechat_enterprise_message_template_admin,model_odoo_wechat_enterprise_message_template,,1,1,1,1
 108,access_odoo_wechat_enterprise_customer,model_odoo_wechat_enterprise_customer,,1,1,1,1
+109,access_odoo_wechat_enterprise_message_manager,model_odoo_wechat_enterprise_customer_message,,1,1,1,1

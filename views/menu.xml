@@ -7,13 +7,24 @@
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
+        <record id="action_wechat_enterprise_welcome_message" model="ir.actions.act_window">
+            <field name="name">欢迎消息</field>
+            <field name="res_model">odoo.wechat.enterprise.welcome_message_template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
         <record id="action_wechat_enterprise_message" model="ir.actions.act_window">
             <field name="name">企业消息</field>
             <field name="res_model">odoo.wechat.enterprise.message</field>
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
-
+        <record id="action_wechat_enterprise_customer_message" model="ir.actions.act_window">
+            <field name="name">客户消息</field>
+            <field name="res_model">odoo.wechat.enterprise.customer_message</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
         <record id="action_wechat_enterprise_log" model="ir.actions.act_window">
             <field name="name">日志</field>
             <field name="res_model">odoo.wechat.enterprise.log</field>
@@ -93,11 +104,6 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <record id="action_wechat_homepage_enterprise" model="ir.actions.act_url">
-            <field name="name">打开企业号官网</field>
-            <field name="url">http://qy.weixin.qq.com</field>
-        </record>
-
         <record id="action_sync_wechat_server_user" model="ir.actions.server">
             <field name="name">Sync Wechat Server User</field>
             <field name="model_id" ref="model_odoo_wechat_enterprise_user"/>
@@ -120,9 +126,10 @@
 
         <menuitem id="menuitem_wechat_en_message" name="消息" parent="menuitem_wechat_enterprise_root" sequence="50"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
-        <menuitem id="menuitem_wechat_en_message_manage" name="消息一览" parent="menuitem_wechat_en_message" sequence="20"
+        <menuitem id="menuitem_wechat_en_message_manage" name="企业消息" parent="menuitem_wechat_en_message" sequence="20"
                   action="action_wechat_enterprise_message"/>
-
+        <menuitem id="menuitem_wechat_en_customer_message_manage" name="客户消息" parent="menuitem_wechat_en_message" sequence="30"
+                  action="action_wechat_enterprise_customer_message"/>
         <!--
         <menuitem id="menuitem_wechat_en_filter" name="过滤器" parent="menuitem_wechat_enterprise_root" sequence="60"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
@@ -130,10 +137,10 @@
                   action="action_wechat_enterprise_filter"/>
          -->
 
-        <menuitem id="menuitem_wechat_en_template_root" name="模板" parent="menuitem_wechat_enterprise_root" sequence="70"
+        <!-- <menuitem id="menuitem_wechat_en_template_root" name="模板" parent="menuitem_wechat_enterprise_root" sequence="70"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
         <menuitem id="menuitem_wechat_en_msg_template_manage" name="消息模板" parent="menuitem_wechat_en_template_root" sequence="30"
-                  action="action_wechat_enterprise_msg_template"/>
+                  action="action_wechat_enterprise_msg_template"/> -->
 <!--    
         <menuitem id="menuitem_wechat_filter_template" name="过滤器模板" parent="menuitem_wechat_en_template_root" sequence="30"
                   action="action_wechat_filter_template"/>
@@ -152,7 +159,7 @@
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_user"/>
         <menuitem id="menuitem_wechat_department" name="部门" parent="menuitem_wechat_en_user" sequence="20"
                   action="action_wechat_department"/>
-        <menuitem id="menuitem_wechat_en_user_manage" name="所有用户" parent="menuitem_wechat_en_user" sequence="30"
+        <menuitem id="menuitem_wechat_en_user_manage" name="用户一览" parent="menuitem_wechat_en_user" sequence="30"
                   action="action_wechat_enterprise_user"/>
         <!--
             <menuitem id="menuitem_wechat_batch_user" name="批量创建用户" parent="menuitem_wechat_en_user" sequence="30"
@@ -175,8 +182,10 @@
 
         <menuitem id="menuitem_wechat_enterprise_config" name="设置" parent="menuitem_wechat_enterprise_root" sequence="110"
                   groups="odoo_wechat_enterprise.group_wechat_enterprise_admin"/>
-        <menuitem id="menuitem_wechat_en_account" name="账户" parent="menuitem_wechat_enterprise_config" sequence="20"
+        <menuitem id="menuitem_wechat_account" name="账户" parent="menuitem_wechat_enterprise_config" sequence="20"
                   action="action_wechat_enterprise_account"/>
+        <menuitem id="menuitem_wechat_welcome_message" name="欢迎消息" parent="menuitem_wechat_enterprise_config" sequence="20"
+                  action="action_wechat_enterprise_welcome_message"/>
 
 <!--
         <act_window id="action_wechat_user_batch_invite"
