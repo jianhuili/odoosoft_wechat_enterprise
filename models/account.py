@@ -16,7 +16,6 @@ class WechatAccount(models.Model):
     token = fields.Char('Callback Token', required=True)
     ase_key = fields.Char('EncodingAESKey', required=True)
     remark = fields.Char('Remark')
-    # filters = fields.One2many('odoo.wechat.enterprise.filter', 'account', 'Filters')
     callback_url = fields.Char(string='Callback URL', compute='_compute_url')
     _sql_constraints = [('wechat_account_code_unique', 'unique(code)', _('Code must be unique !'))]
 
@@ -40,15 +39,16 @@ class WechatAccount(models.Model):
 
     def process_request(self, msg):
         # find match filter
-        if msg.type == 'event':
-            match_filters = self.filters.search(
-                [('type', '=', 'event'), ('event_type', '=', msg.event), ('active', '=', True), ('is_template', '=', False)])
-        else:
-            match_filters = self.filters.search([('type', '=', msg.type), ('active', '=', True), ('is_template', '=', False)])
+        # if msg.type == 'event':
+        #     match_filters = self.filters.search(
+        #         [('type', '=', 'event'), ('event_type', '=', msg.event), ('active', '=', True), ('is_template', '=', False)])
+        # else:
+        #     match_filters = self.filters.search([('type', '=', msg.type), ('active', '=', True), ('is_template', '=', False)])
 
-        for a_filter in match_filters:
-            result = a_filter.process(msg)
-            if result[0]:
-                return result[1]
-        else:
-            return None
+        # for a_filter in match_filters:
+        #     result = a_filter.process(msg)
+        #     if result[0]:
+        #         return result[1]
+        # else:
+        #     return None
+        None

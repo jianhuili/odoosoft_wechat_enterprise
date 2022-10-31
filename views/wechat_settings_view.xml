@@ -12,7 +12,7 @@
                         <button string="取消" type="object" name="cancel" class="oe_link"/>
                     </header>
 
-                    <group string="表单默认值默认值">
+                    <group string="Default Values">
                         <field name="default_account"/>
                     </group>
                 </form>

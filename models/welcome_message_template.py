@@ -17,7 +17,7 @@ class WelcomeMessageTemplate(models.Model):
     template_id = fields.Char("Template Id", readonly=True)
     name = fields.Char("Name")
     text = fields.Text('Text')
-    addition_content_type = fields.Selection([('link', 'Link'), ('image', 'Image'), ('miniprogram', 'Mini Program')], 'Message Type', default='text', required=True)
+    addition_content_type = fields.Selection([('', 'None'), ('link', 'Link'), ('image', 'Image'), ('miniprogram', 'Mini Program')], 'Addition Content Type', default='')
     title = fields.Char('Title')
     url = fields.Text('URL')
     pic_url = fields.Text('Picture URL')

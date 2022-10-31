@@ -31,9 +31,9 @@
 
                             </p>
                         </div>
-                        <separator string="标题" readonly="0"/>
+                        <separator string="Title" readonly="0"/>
                         <field name="title" readonly="0"/>
-                        <separator string="正文"/>
+                        <separator string="Content"/>
                         <field name="content" readonly="0"/>
                     </sheet>
                 </form>

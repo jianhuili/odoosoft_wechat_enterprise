@@ -27,21 +27,21 @@
                                 <field name="addition_content_type" widget="radio"/>
                             </group>
                         </group>
-                        <separator string="附加消息"/>
+                        <separator string="Addition Message"/>
                         <group col="1" attrs="{'invisible':[('addition_content_type','not in', ['link','miniprogram'])]}">
-                            <field name="title" nolabel="1" placeholder="消息标题"/>
+                            <field name="title" nolabel="1" placeholder="Message Title>"/>
                         </group>
                         <group col="1" attrs="{'invisible':[('addition_content_type','not in', ['link'])]}">
-                            <field name="pic_url" nolabel="1" placeholder="封面链接地址" />
-                            <field name="url" nolabel="1" placeholder="内容链接地址"/>
-                            <field name="desc" nolabel="1" placeholder="消息描述" />
+                            <field name="pic_url" nolabel="1" placeholder="Cover Link" />
+                            <field name="url" nolabel="1" placeholder="Content Link"/>
+                            <field name="desc" nolabel="1" placeholder="Description" />
                         </group>
                          <group col="1" attrs="{'invisible':[('addition_content_type','not in', ['miniprogram'])]}">
-                            <field name="program_id" nolabel="1" placeholder="小程序ID"/>
-                            <field name="program_page" nolabel="1" placeholder="小程序启动页"/>
+                            <field name="program_id" nolabel="1" placeholder="MiniProgram AppId"/>
+                            <field name="program_page" nolabel="1" placeholder="MiniProgram StartPage"/>
                         </group>
                         <group attrs="{'invisible':[('addition_content_type','not in', ['image','miniprogram'])]}" col="1">
-                            <separator string="图片"/>
+                            <separator string="Image"/>
                             <field name="file" widget="many2many_binary" nolabel="1"/>
                         </group>
                     </sheet>

@@ -36,21 +36,5 @@
             <field name="category_id" ref="base.module_category_odoo_wechat"/>
             <field name="implied_ids" eval="[(4, ref('odoo_wechat_enterprise.group_wechat_enterprise_user'))]"/>
         </record>
-        <!--ir.rule-->
-        <record id="rule_all_on_one_delete_system_filter" model="ir.rule">
-            <field name="name">系统过滤器不可变更</field>
-            <field name="model_id" ref="odoo_wechat_enterprise.model_odoo_wechat_enterprise_filter"/>
-            <field name="groups" eval="[(4, ref('odoo_wechat_enterprise.group_wechat_enterprise_user'))]"/>
-            <field name="domain_force">[('is_system','=',True)]</field>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
-        <record id="rule_all_on_one_delete_common_filter" model="ir.rule">
-            <field name="name">一般过滤器可编辑</field>
-            <field name="model_id" ref="odoo_wechat_enterprise.model_odoo_wechat_enterprise_filter"/>
-            <field name="groups" eval="[(4, ref('odoo_wechat_enterprise.group_wechat_enterprise_user'))]"/>
-            <field name="domain_force">[('is_system','=',False)]</field>
-        </record>
     </data>
 </openerp>

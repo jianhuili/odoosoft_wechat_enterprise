@@ -25,9 +25,9 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="sent_message" string="发送" type="object" states="draft"
+                        <button name="sent_message" string="Send" type="object" states="draft"
                                 />
-                        <button name="sent_message" string="重发" type="object" states="send,fail"
+                        <button name="sent_message" string="Resend" type="object" states="send,fail"
                                 />
                         <field name="state" widget="statusbar" readonly="1"/>
                     </header>
@@ -44,27 +44,27 @@
                         <group >
                             <field name="customers" widget="many2many_tags" readonly="0"  options="{'no_create_edit': True}" />
                         </group>
-                        <separator string="消息内容"/>
+                        <separator string="Message Body"/>
                         <group col="1">
                             <!-- <field name="template" readonly="0" /> -->
-                            <field name="title" nolabel="1" placeholder="标题" readonly="0" />
+                            <field name="title" nolabel="1" placeholder="Title" readonly="0" />
                         </group>
                         <group col="1" attrs="{'invisible':[('type','not in', ['link'])]}">
-                            <field name="pic_url" nolabel="1" placeholder="封面链接地址" />
-                            <field name="url" nolabel="1" placeholder="内容链接地址"/>
+                            <field name="pic_url" nolabel="1" placeholder="Cover Link" />
+                            <field name="url" nolabel="1" placeholder="Content Link"/>
                         </group>
                         <group col="1" attrs="{'invisible':[('type','not in', ['text','link'])]}">
-                            <field name="content" nolabel="1" placeholder="内容" />
+                            <field name="content" nolabel="1" placeholder="Text Content" />
                         </group>
                          <group col="1" attrs="{'invisible':[('type','not in', ['miniprogram'])]}">
-                            <field name="program_id" nolabel="1" placeholder="小程序ID"/>
-                            <field name="program_page" nolabel="1" placeholder="小程序启动页"/>
+                            <field name="program_id" nolabel="1" placeholder="MiniProgram AppId"/>
+                            <field name="program_page" nolabel="1" placeholder="MiniProgram Startpage"/>
                         </group>
                         <group attrs="{'invisible':[('type','not in', ['image','miniprogram'])]}" col="1">
-                            <separator string="图片"/>
+                            <separator string="Image"/>
                             <field name="file" widget="many2many_binary" nolabel="1"/>
                         </group>
-                        <separator string="发送结果"/>
+                        <separator string="Send Result"/>
                         <field name="result" readonly="1"/>
                         <group>
                             <field name="send_time" readonly="1"/>

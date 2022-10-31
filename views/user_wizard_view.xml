@@ -14,11 +14,11 @@
                             <field name="processed_users" widget="many2many_tags" readonly="1"/>
                             <field name="create_users" readonly="1"/>
                         </group>
-                        <separator string="创建结果"/>
+                        <separator string="Creation Result"/>
                         <field name="result" readonly="1"/>
                     </sheet>
                     <footer>
-                        <button name="button_batch_create" type="object" string="批量创建" class="oe_highlight"/>
+                        <button name="button_batch_create" type="object" string="Batch Create" class="oe_highlight"/>
                         <!--<button name="button_batch_create_fast" type="object" string="异步批量创建" class="oe_highlight" confirm="异步批量创建用在一次需要创建大量微信账户的情况,如果需要创建的用户数量不超过10人,请尽量使用批量创建,异步创建完成后请关闭本窗口,等待一段时间后检查用户是否创建成功"/>-->
                         or
                         <button string="关闭" class="oe_link" special="cancel"/>
@@ -41,9 +41,9 @@
                         </group>
                     </sheet>
                     <footer>
-                        <button string="批量邀请" name="button_batch_invite" type="object" class="oe_highlight"/>
+                        <button string="Batch Invite" name="button_batch_invite" type="object" class="oe_highlight"/>
                         or
-                        <button string="关闭" class="oe_link" special="cancel"/>
+                        <button string="Close" class="oe_link" special="cancel"/>
                     </footer>
                 </form>
             </field>

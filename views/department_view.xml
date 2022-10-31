@@ -28,7 +28,7 @@
                             <field name="parent_id"/>
                             <field name="name"/>
                         </group>
-                        <group string="所属用户">
+                        <group string="Belong Users">
                             <field name="users" nolabel="1"/>
                         </group>
                     </sheet>

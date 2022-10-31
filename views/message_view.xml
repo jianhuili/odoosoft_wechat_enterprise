@@ -24,9 +24,9 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="sent_message" string="发送" type="object" states="draft"
+                        <button name="sent_message" string="Send" type="object" states="draft"
                                 />
-                        <button name="sent_message" string="重发" type="object" states="send,fail"
+                        <button name="sent_message" string="Resend" type="object" states="send,fail"
                                 />
                         <field name="state" widget="statusbar" readonly="1"/>
                     </header>
@@ -46,16 +46,16 @@
                             <field name="users" widget="many2many_tags" readonly="0"  options="{'no_create_edit': True}"/>
                         </group>
                         <group attrs="{'invisible':[('type','not in', ['news', 'text'])]}" col="1">
-                            <separator string="消息内容"/>
+                            <separator string="Message Content"/>
                             <!-- <field name="template" readonly="0" /> -->
-                            <field name="title" nolabel="1" placeholder="标题" readonly="0" />
-                            <field name="content" nolabel="1" placeholder="正文" readonly="0" />
+                            <field name="title" nolabel="1" placeholder="Title" readonly="0" />
+                            <field name="content" nolabel="1" placeholder="Text Content" readonly="0" />
                         </group>
                         <group attrs="{'invisible':[('type','not in', ['image'])]}" col="1">
-                            <separator string="文件"/>
+                            <separator string="Image"/>
                             <field name="file" widget="many2many_binary" nolabel="1" readonly="0" />
                         </group>
-                        <separator string="发送结果"/>
+                        <separator string="Send Result"/>
                         <field name="result" readonly="1"/>
                         <group>
                             <field name="send_time" readonly="1"/>

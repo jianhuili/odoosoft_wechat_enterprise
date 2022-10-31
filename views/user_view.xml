@@ -24,11 +24,11 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="button_invite" string="邀请关注" type="object" states="4"/>
-                        <button name="unlink_force" string="本地强制删除" type="object" />
-                        <button name="create_force" string="远程强制创建" type="object" />
-                        <button name="write_force" string="远程强制更新" type="object" />
-                        <button name="sync_wechat_server" string="同步服务器用户数据" type="object" />
+                        <button name="button_invite" string="Invite" type="object" states="4"/>
+                        <button name="unlink_force" string="Force Delete" type="object" />
+                        <button name="create_force" string="Force Create" type="object" />
+                        <button name="write_force" string="Force Update" type="object" />
+                        <button name="sync_wechat_server" string="Sync Wechat Server" type="object" />
                         <field name="state" widget="statusbar" readonly="1" statusbar_visible="1,4"/>
                     </header>
                     <sheet>
@@ -94,7 +94,7 @@
                         <field name="wechat_id" readonly="0" />
                     </group>
                     <footer>
-                        <button name="create_wechat_user" type="object" string="创建" class="oe_highlight"/>
+                        <button name="create_wechat_user" type="object" string="Create" class="oe_highlight"/>
                         or
                         <button string="Cancel" class="oe_link" special="cancel"/>
                     </footer>
@@ -103,7 +103,7 @@
         </record>
 
         <record id="action_wechat_enterprise_user_wizard" model="ir.actions.act_window">
-            <field name="name">创建关联微信账户</field>
+            <field name="name">CreateWeChatAccount</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">odoo.wechat.enterprise.user.wizard</field>
             <field name="view_mode">form</field>
@@ -118,8 +118,8 @@
             <field name="inherit_id" ref="base.view_users_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//page[last()]" position="after">
-                    <page string="微信" >
-                        <button name="%(action_wechat_enterprise_user_wizard)d" type="action" string="创建并且绑定微信账户"
+                    <page string="WeChat" >
+                        <button name="%(action_wechat_enterprise_user_wizard)d" type="action" string="CreateAndBindWeChat"
                                 />
                         <group>
                             <field name="wechat_id"/>
