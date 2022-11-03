@@ -184,6 +184,19 @@ class WechatCustomer(models.Model):
         _logger.debug('get_wechat_user results: %s', users)
         return users[0] if len(users) >=0 else None
 
+    def button_transfer(self):
+        """
+        显示客户转移画面
+        """
+        _logger.debug('Enter button_transfer...')
+        return {
+            'name': "Transfer Customer",
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'odoo.wechat.enterprise.customer.transfer.wizard',
+            'target': 'new'
+        }
+
     @staticmethod
     def get_unassigned_customer_list(wechat_client):
         """
@@ -234,19 +247,20 @@ class CustomerTransferWizard(models.TransientModel):
     customer = fields.Many2one('odoo.wechat.enterprise.customer', 'Customer', readonly=True)
     current_follow_user = fields.Many2one('odoo.wechat.enterprise.user', 'Current Follow User', readonly=True)
     new_follow_user = fields.Many2one('odoo.wechat.enterprise.user', 'New Follow User')
-    result = fields.Char('Result')
 
     @api.model
     def default_get(self, fields_list):
-        _logger.debug('Enter default_get, active_ids=%s'.format( self.env.context['active_ids']))
-        customers = self.env['odoo.wechat.enterprise.customer'].search([('id', '=', self.env.context['active_ids'])])
-        customer = customers[0]
-
-        defaults = {
-            'account' : customer.account,
-            'customer' : customer,
-            'current_follow_user' : customer.follow_user,
-        }
+        _logger.debug('Enter default_get')
+        active_ids = self.env.context.get("active_ids")
+        customer =  self.env["odoo.wechat.enterprise.customer"].browse(active_ids)
+        _logger.debug('Customer results: %s', customer)
+        defaults = {}
+        if customer:
+            defaults = {
+                'account' : customer.account.id,
+                'customer' : customer.id,
+                'current_follow_user' : customer.follow_user.id,
+            }
         return defaults
 
     def button_transfer(self):
@@ -260,12 +274,14 @@ class CustomerTransferWizard(models.TransientModel):
             new_follow_user = record.new_follow_user
             
             self.transfer_customer(record, customer, current_follow_user, new_follow_user)
-                    
-        return {
-            'type': 'ir.actions.act_window.message',
-            'title': _('Customer Transfer'),
-            'message': _('Customer transferred successfully'),
-        }
+            
+        ## close current window when succeed
+        return {'type': 'ir.actions.act_window_close'}         
+        # return {
+        #     'type': 'ir.actions.act_window.message',
+        #     'title': _('Customer Transfer'),
+        #     'message': _('Customer transferred successfully'),
+        # }
 
     def transfer_customer(self, record, customer, current_follow_user, new_follow_user):
         """
@@ -305,11 +321,12 @@ class CustomerTransferWizard(models.TransientModel):
 
         if (process_result['errcode'] == 0):
             ## update record
-            customer_model = self.env['odoo.wechat.enterprise.customer'].browse(customer.id)
-            customer_model.write({'follow_user': new_follow_user,'follow_userid': new_follow_user.wechat_id})
+            ## the follow user info will not change immediately
+            # customer_model = self.env['odoo.wechat.enterprise.customer'].browse(customer.id)
+            # customer_model.write({'follow_user': new_follow_user,'follow_userid': new_follow_user.wechat_id})
             _logger.info(u'Customer transferred succeed.Customer external user id: %s, Current follow user id :%s, new follow user id: %s', customer_user_id, handover_userid, takeover_userid)
         else:
-            record.result = process_result['errmessage']
+            # record.result = process_result['errmessage']
             _logger.warning(u'Customer transferred failed.Customer external user id: %s, Current follow user id :%s, new follow user id: %s', customer_user_id, handover_userid, takeover_userid)
             raise exceptions.Warning(_('Failed to transfer customer: %s'), customer_user_id)
 

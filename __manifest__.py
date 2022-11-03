@@ -26,6 +26,6 @@ Odoo Wechat Enterprise""",
         'views/welcome_message_template_view.xml',
     ],
     'demo': [],
-    "external_dependencies": {"python": ['wechatpy']},
+    "external_dependencies": {"python": ['wechatpy','odoo13-addon-web-ir-actions-act-window-message']},
     'application': True
 }
